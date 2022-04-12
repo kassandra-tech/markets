@@ -1,9 +1,9 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <TestProfile xmlns="http://www.specflow.org/schemas/plus/TestProfile/1.5">
-  <Settings projectName="KassandraWebTest" />
+  <Settings projectName="KassandraMarketsUserActions" />
   <Execution stopAfterFailures="0" testThreadCount="4" retryFor="None" testSchedulingMode="Sequential" />
   <TestAssemblyPaths>
-    <TestAssemblyPath>KassandraWebTest.dll</TestAssemblyPath>
+    <TestAssemblyPath>KassandraAccount.dll</TestAssemblyPath>
   </TestAssemblyPaths>
   <DeploymentTransformation>
     <Steps>
