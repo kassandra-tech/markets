@@ -1,5 +1,6 @@
 ﻿@Markets
 Feature: Markets Search
+This feature details local market search behavior on the markets screen.
 
 Scenario Outline: Search markets screen for currency
 	Given the user navigates to the "Markets" screen
@@ -23,6 +24,14 @@ Examples:
 | "BTC-USD"  |
 | "BTC/USD"  |
 | "BTC USD"  |
+
+Scenario: Search markets screen for multiple markets
+	Given the user navigates to the "Markets" screen
+	And the local search is selected
+	When "DOGE, LTC, ADA" is entered into the search field
+	Then "DOGE" markets are visible
+	And "LTC" markets are visible
+	And "ADA" markets are visible
 
 Scenario: Search multiple markets
 	Given the user navigates to the "Markets" screen

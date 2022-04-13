@@ -1,23 +1,7 @@
 ﻿@Markets
 Feature: Market Views
-
-Scenario Outline: Update market view timeframe
-	Given the user navigates to the "Markets" screen
-	When  the "Timeframe" dropdown is clicked
-	And the <time> button is clicked
-	Then the data range is <time>
-
-Examples:
-| time           |
-| "30 m"         |
-| "1 H"          |
-| "4 H"          |
-| "8 H"          |
-| "12 H"         |
-| "Week"         |
-| "Quarter"      |
-| "Year"         |
-| "Year to date" |
+This feature details the different view states such as sorting, filtering, 
+and expanding to view data per exchange for the Markets screen.
 
 Scenario: Sort markets in ascending order
 	Given the user navigates to the "Markets" screen

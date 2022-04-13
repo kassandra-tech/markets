@@ -1,6 +1,7 @@
 ﻿@Markets
 @Layout
 Feature: Markets
+This feature details the layout for the markets screen.
 
 Scenario: Markets screen header layout
 	Given the user navigates to the "Markets" screen
