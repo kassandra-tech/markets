@@ -1,0 +1,12 @@
+# Compiled Object folders
+bin
+obj
+packages
+
+# User files
+*.suo
+*.vs
+
+#Spec Flow files
+*feature.cs
+TestResults
