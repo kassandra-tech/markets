@@ -14,7 +14,7 @@ Scenario: Sort markets in decending order
 	When the "Market Header" button is clicked
 	And the "Market Header" button is clicked
 	Then the "Makret Decending" icon is highlighted
-	And the markets are sorted in decending order
+	And the markets are sorted in descending order
 
 Scenario: Sort rank in ascending order
 	Given the user navigates to the "Markets" screen
@@ -27,7 +27,7 @@ Scenario: Sort rank in decending order
 	When the "Rank Header" button is clicked
 	And the "Rank Header" button is clicked
 	Then the "Rank Decending" icon is highlighted
-	And the rank is sorted in decending order
+	And the rank is sorted in descending order
 
 Scenario: Sort rating in ascending order
 	Given the user navigates to the "Markets" screen
@@ -40,7 +40,7 @@ Scenario: Sort rating in decending order
 	When the "Rating Header" button is clicked
 	And the "Rating Header" button is clicked
 	Then the "Rating Decending" icon is highlighted
-	And the rating is sorted in decending order
+	And the rating is sorted in descending order
 
 Scenario: Sort price in ascending order
 	Given the user navigates to the "Markets" screen
@@ -53,7 +53,7 @@ Scenario: Sort price in decending order
 	When the "Price Header" button is clicked
 	And the "Price Header" button is clicked
 	Then the "Price Decending" icon is highlighted
-	And the price is sorted in decending order
+	And the price is sorted in descending order
 
 Scenario: Sort indicator in ascending order
 	Given the user navigates to the "Markets" screen
@@ -66,7 +66,7 @@ Scenario: Sort indicator in decending order
 	When the "Indicator Header" button is clicked
 	And the "Indicator Header" button is clicked
 	Then the "Indicator Decending" icon is highlighted
-	And the indicator is sorted in decending order
+	And the indicator is sorted in descending order
 
 Scenario: Sort volume in ascending order
 	Given the user navigates to the "Markets" screen
@@ -79,33 +79,31 @@ Scenario: Sort volume in decending order
 	When the "Volume Header" button is clicked
 	And the "Volume Header" button is clicked
 	Then the "Volume Decending" icon is highlighted
-	And the volume is sorted in decending order
+	And the volume is sorted in descending order
 
 Scenario: Select exchanges to view market information
 	Given the user navigates to the "Markets" screen
 	When the "Exchanges" dropdown is clicked
-	Then the "Supported Exchanges" menu is displayed
+	Then the "Supported Exchanges" dropdown is displayed
 
 Scenario: View market information for markets
 Expand a market to see the supported exchanges for a market with less than 5 supported exchanges.
 	Given the user navigates to the "Markets" screen
-	When the "Expand Markets" button is clicked
-	Then all markets will be shown for the given market
+	When the "See Exchanges" button is clicked on the "PPC-BTC" market
+	Then exchanges will be shown for the "PPC-BTC" market
 
 Scenario: View market information for expanded markets
 Expand a market to see the supported exchanges for a market that has more than 5 supported exchanges.
 	Given the user navigates to the "Markets" screen
-	When the "More Markets" button is clicked
-	Then all markets will be shown for the given market
+	When the "See Exchanges" button is clicked on the "BTC-USD" market
+	Then exchanges will be shown for the "BTC-USD" market
 
-Scenario: View markets for a secondary currency
+Scenario: View markets for a Quote currency
 	Given the user navigates to the "Markets" screen
-	And the "USDT" filter is clicked
 	When the "BTC Symbol" button is clicked
-	Then only "BTC" markets are visible
+	Then only "BTC" markets are displayed
 
 Scenario: View markets for a primary currency
 	Given the user navigates to the "Markets" screen
-	And the "USDT" filter is clicked
 	When the "USDT Symbol" button is clicked
-	Then only "USDT" markets are visible
+	Then only "USDT" markets are displayed

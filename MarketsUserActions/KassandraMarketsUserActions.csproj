@@ -6,9 +6,7 @@
   <ItemGroup>
     <Folder Include="Drivers\" />
     <Folder Include="Designs\" />
-    <Folder Include="Model\" />
-    <Folder Include="Pages\" />
-    <Folder Include="Steps\" />
+    <Folder Include="Type\" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotNetSeleniumExtras.WaitHelpers" Version="3.11.0" />
