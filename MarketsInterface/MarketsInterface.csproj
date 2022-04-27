@@ -4,8 +4,27 @@
     <TargetFramework>net5.0</TargetFramework>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DocumentationFile>C:\Repos\markets\MarketsInterface\MarketsInterface.xml</DocumentationFile>
+    <OutputPath>bin\Debug\net5.0\</OutputPath>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <DocumentationFile>C:\Repos\markets\MarketsInterface\MarketsInterface.xml</DocumentationFile>
+    <OutputPath>bin\Release\net5.0\</OutputPath>
+  </PropertyGroup>
+
   <ItemGroup>
-    <PackageReference Include="Swashbuckle.AspNetCore" Version="5.6.3" />
+    <Compile Include="..\webtest\KassandraWebTest\Kassandra\TradeActionModel.cs" Link="Kassandra\TradeActionModel.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.3.1" />
+    <PackageReference Include="Unchase.Swashbuckle.AspNetCore.Extensions" Version="2.6.12" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\MarketsUserActions\KassandraMarketsUserActions.csproj" />
   </ItemGroup>
 
 </Project>

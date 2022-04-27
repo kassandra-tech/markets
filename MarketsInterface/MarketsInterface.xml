@@ -1,0 +1,109 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>MarketsInterface</name>
+    </assembly>
+    <members>
+        <member name="T:MarketsInterface.Controllers.MarketsController">
+            <summary>
+            APIs to support Kassandra markets.
+            </summary>
+        </member>
+        <member name="M:MarketsInterface.Controllers.MarketsController.#ctor(Microsoft.Extensions.Logging.ILogger{MarketsInterface.Controllers.MarketsController})">
+            <summary>
+            Constructor.
+            </summary>
+            <param name="logger">Log output for the controller.</param>
+        </member>
+        <member name="M:MarketsInterface.Controllers.MarketsController.Markets(KassandraWebTest.Kassandra.Exchanges)">
+            <summary>
+            Get available markets for the given exchange.
+            </summary>
+            <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MarketsInterface.Controllers.MarketsController.Orderbook(KassandraWebTest.Kassandra.Exchanges,System.String)">
+            <summary>
+            Get current orderbook for open buy and sell orders for the given market on the selected exchange.
+            </summary>
+            <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
+            <param name="market">Market to retrieve data from.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MarketsInterface.Controllers.MarketsController.Price(KassandraWebTest.Kassandra.Exchanges,System.String)">
+            <summary>
+            Get market price for the given market on the selected exchange.
+            </summary>
+            <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
+            <param name="market">Market to retrieve data from.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MarketsInterface.Controllers.MarketsController.PriceRange(KassandraWebTest.Kassandra.Exchanges,System.String,System.DateTime,System.DateTime)">
+            <summary>
+            Get the market price range for the given timeframe.
+            </summary>
+            <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
+            <param name="market">Market to retrieve data from.</param>
+            <param name="startTime">First day in the date range.</param>
+            <param name="endTime">Last Day in the date range.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MarketsInterface.Controllers.MarketsController.Volume(System.String,KassandraWebTest.Kassandra.Exchanges)">
+            <summary>
+            Get the volume for a given market.
+            If an exchange is passed the volume for the given exchange will be returned.
+            </summary>
+            <param name="market">Market to retrieve data from.</param>
+            <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MarketsInterface.Controllers.MarketsController.PriceIndicator(System.String,System.DateTime,System.DateTime,KassandraWebTest.Kassandra.Exchanges)">
+            <summary>
+            Determine the current market price value compared to the given date range.
+            </summary>
+            <param name="market">Market to retrieve data from.</param>
+            <param name="startTime">First day in the date range.</param>
+            <param name="endTime">Last Day in the date range.</param>
+            <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MarketsInterface.Controllers.MarketsController.Exchanges(System.String)">
+            <summary>
+            Exchange states for a given market.
+            </summary>
+            <param name="market">Market to retrieve data from.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MarketsInterface.Controllers.MarketsController.Rank(KassandraWebTest.Kassandra.Exchanges,System.String)">
+            <summary>
+            Get the rank of the given market.
+            </summary>
+            <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
+            <param name="currency">Currency to get the rank of.</param>
+            <returns></returns>
+        </member>
+        <member name="M:MarketsInterface.Controllers.MarketsController.Rating(KassandraWebTest.Kassandra.Exchanges,System.String)">
+            <summary>
+            Get the rating of the given currency.
+            </summary>
+            <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
+            <param name="currency">Currency to get the rating of.</param>
+            <returns></returns>
+        </member>
+        <member name="T:KassandraWebTest.Kassandra.TradeActionModel">
+            <summary>
+            Supported types of trades.
+            </summary>
+        </member>
+        <member name="F:KassandraWebTest.Kassandra.TradeActionModel.Buy">
+            <summary>
+            Buy
+            </summary>
+        </member>
+        <member name="F:KassandraWebTest.Kassandra.TradeActionModel.Sell">
+            <summary>
+            Sell
+            </summary>
+        </member>
+    </members>
+</doc>

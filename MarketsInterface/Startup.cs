@@ -1,16 +1,14 @@
+using System;
+using System.IO;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+
+using Unchase.Swashbuckle.AspNetCore.Extensions.Extensions;
 
 namespace MarketsInterface
 {
@@ -31,6 +29,12 @@ namespace MarketsInterface
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "MarketsInterface", Version = "v1" });
+                c.IncludeXmlComments(Path.Combine(AppContext.BaseDirectory, "MarketsInterface.xml"));
+                c.AddEnumsWithValuesFixFilters();
+            });
+            services.ConfigureSwaggerGen(c =>
+            {
+                c.CustomSchemaIds(configuration => configuration.FullName);
             });
         }
 
