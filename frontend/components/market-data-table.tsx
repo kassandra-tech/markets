@@ -165,6 +165,8 @@ const StyledFilterButton = styled.button`
   align-items: center;
   color: rgba(255, 255, 255, 0.6);
   margin-top: 10px;
+  outline: none;
+  border: 0;
 `;
 
 const StyledDataTableContainer = styled(FlexColumn)`
