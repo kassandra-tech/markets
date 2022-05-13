@@ -1,6 +1,6 @@
 import {ThemeContext} from "styled-components";
 import React, {useContext} from "react";
-import {Header} from "../styled/header";
+import {HeaderStyles} from "../styled/header.styles";
 import {SortingStates} from "../../../services/constants";
 
 export interface TableHeader {
@@ -10,6 +10,7 @@ export interface TableHeader {
     onSort?: Function;
     selected?: boolean;
     sortSelected?: SortingStates;
+    withInfo?: boolean;
 }
 
 export default function TableHeader(
@@ -19,7 +20,8 @@ export default function TableHeader(
         sortable = false,
         onSort = () => {},
         selected = false,
-        sortSelected = SortingStates.none
+        sortSelected = SortingStates.none,
+        withInfo = false
     }: TableHeader
 ) {
 
@@ -44,10 +46,20 @@ export default function TableHeader(
     }
 
 
-    return <Header width={width} role="button" onClick={sort}>
+    return <HeaderStyles width={width} role="button" onClick={sort} selected={selected}>
         <span>
             {children}
         </span>
+
+        {withInfo && <div className="info">
+            <svg width="14" height="16" viewBox="0 0 14 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="7" cy="6" r="4.625" stroke="white" strokeOpacity="0.6" strokeWidth="0.75"/>
+                <path d="M7 5.70703V8.6237" stroke="white" strokeOpacity="0.6" strokeLinecap="round" strokeLinejoin="round"/>
+                <path d="M7 3.38148L7.00583 3.375" stroke="white" strokeOpacity="0.6" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+        </div>
+        }
+
         {sortable && <div className="sorting">
             <svg width="5" height="4" viewBox="0 0 5 4" fill="none" xmlns="http://www.w3.org/2000/svg">
                 <path d="M4.25382 4H0.746175C0.607696 4.00022 0.471992 3.9582 0.35477 3.87882C0.237548 3.79943 0.143601 3.68592 0.0838036 3.55143C0.0138036 3.39186 -0.0131574 3.21432 0.00599255 3.03905C0.0251425 2.86378 0.0896334 2.69783 0.192116 2.5601L1.94594 0.272417C2.01477 0.186907 2.09986 0.118328 2.19546 0.0713264C2.29105 0.024325 2.39491 0 2.5 0C2.60509 0 2.70895 0.024325 2.80454 0.0713264C2.90014 0.118328 2.98523 0.186907 3.05406 0.272417L4.80788 2.5601C4.91037 2.69783 4.97486 2.86378 4.99401 3.03905C5.01316 3.21432 4.9862 3.39186 4.9162 3.55143C4.8564 3.68592 4.76245 3.79943 4.64523 3.87882C4.52801 3.9582 4.3923 4.00022 4.25382 4Z"
@@ -62,5 +74,5 @@ export default function TableHeader(
                 />
             </svg>
         </div>}
-    </Header>
+    </HeaderStyles>
 }

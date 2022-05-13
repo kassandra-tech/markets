@@ -3,3 +3,11 @@ export enum SortingStates {
     asc = 'asc',
     desc = 'desc'
 }
+
+export enum Currencies {
+    'btc',
+    'eth',
+    'bnb',
+    'mana',
+    'vet'
+}

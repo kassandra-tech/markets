@@ -5,6 +5,9 @@ import placeholder from '../public/Header main.png';
 import Head from "next/head";
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
+import MarketCell from "../components/market-data-table/components/market-cell";
+import {Currencies} from "../services/constants";
+import MainMarketCell from "../components/market-data-table/components/main-market-cell";
 
 const StyledPageContainer = styled.div`
   display: flex;
@@ -19,28 +22,35 @@ const columns = [
         name: 'Market',
         sortable: true,
         width: 200,
-        dataField: 'market'
+        dataField: 'market',
+        cell: MarketCell
     },
     {
         name: 'Rank',
         sortable: true,
-        dataField: 'rank'
+        dataField: 'rank',
+        withInfo: true,
+        cell: MainMarketCell
     },
     {
         name: 'Rating',
         sortable: true,
-        dataField: 'rating'
+        dataField: 'rating',
+        withInfo: true,
+        cell: MainMarketCell
     },
     {
         name: 'Price',
         sortable: true,
-        dataField: 'price'
+        dataField: 'price',
+        cell: MainMarketCell
     },
     {
         name: 'Range',
         sortable: true,
         width: 150,
-        dataField: 'range'
+        dataField: 'range',
+        cell: MainMarketCell
     },
     {
         name: 'Indicator',
@@ -65,33 +75,42 @@ const columns = [
 const data = [
     {
         id: 1,
-        market: 'Bitcoin',
+        market: {
+            name: 'Bitcoin',
+            id: Currencies.btc
+        },
         rank: 1,
         rating: 'AAA',
-        price: 39624.49,
-        range: 39624.49,
+        price: [39624.49, 39623.13],
+        range: [39624.49, 37620.12],
         indicator: 25,
         volume: 23669395398.55,
         exchanges: ''
     },
     {
         id: 2,
-        market: 'Ethereum',
+        market: {
+            name: 'Ethereum',
+            id: Currencies.eth
+        },
         rank: 2,
         rating: 'BBB',
-        price: 2889.43,
-        range: 2905.45,
+        price: [2889.43, 2887.43],
+        range: [2905.45, 2711.32],
         indicator: 50,
         volume: 17088996369.48,
         exchanges: ''
     },
     {
         id: 3,
-        market: 'BNB',
+        market: {
+            name: 'Binance',
+            id: Currencies.bnb
+        },
         rank: 4,
         rating: 'BBB',
-        price: 384.44,
-        range: 384.60,
+        price: [384.44, 382.01],
+        range: [384.60, 321.15],
         indicator: 75,
         volume: 1427814561.55,
         exchanges: ''

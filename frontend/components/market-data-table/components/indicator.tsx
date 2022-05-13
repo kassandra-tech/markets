@@ -33,9 +33,7 @@ const IndicatorStyles = styled.div`
 
 
 export default function Indicator({value = 0}: {value: number}) {
-
     const width = value * 0.9;
-    console.log('indicator: ', width, value);
     return <IndicatorStyles>
         <div className='background'>
             <svg width="90" height="20" viewBox="0 0 90 20" fill="none" xmlns="http://www.w3.org/2000/svg" xmlnsXlink="http://www.w3.org/1999/xlink">

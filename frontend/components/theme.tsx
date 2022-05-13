@@ -4,7 +4,8 @@ import { ThemeProvider } from "styled-components";
 const theme = {
     colors: {
         white: '#ffffff',
-        cryptoGreen: '#3FE3C8'
+        cryptoGreen: '#3FE3C8',
+        grey: 'rgba(255, 255, 255, 0.6)'
     },
     /*fonts: ["sans-serif", "Roboto"],
     fontSizes: {

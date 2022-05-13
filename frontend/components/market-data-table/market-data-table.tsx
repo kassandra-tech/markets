@@ -3,9 +3,10 @@ import {FlexColumn} from "../styled-wrappers";
 import TableFilters from "./components/table-filters";
 import TableHeader from "./components/table-header";
 import {v4 as uuidV4} from 'uuid';
-import {useState} from "react";
+import {ReactNode, useEffect, useState} from "react";
 import {SortingStates} from "../../services/constants";
 import TableRow from "./components/table-row";
+import {orderBy, isArray, isObject} from 'lodash';
 
 const Container = styled.main`
       display: flex;
@@ -39,6 +40,8 @@ export interface Column {
     sortable: boolean;
     width?: number;
     dataField: string;
+    withInfo?: boolean;
+    cell?: any;
 }
 
 export interface MarketDataTableProps {
@@ -55,8 +58,10 @@ export default function MarketDataTable(
 
     // const ExpandedComponent = ({ data }: {data: any}) => <pre>{JSON.stringify(data, null, 2)}</pre>;
 
+    const [internalData, setInternalData] = useState<any[]>(data);
+
     const [sortingState, setSortingState] = useState<any>({
-        sort: SortingStates.none,
+        order: SortingStates.none,
         field: ''
     })
 
@@ -64,15 +69,27 @@ export default function MarketDataTable(
          console.log('filter change', params);
     }
 
-    const sortChange = (sort: SortingStates, field: string) => {
-        console.log('sortChange: ', sort, field);
+    const sortChange = (order: SortingStates, field: string) => {
         setSortingState({
-            sort,
+            order,
             field
         })
     }
 
-    console.log(sortingState);
+    useEffect(() => {
+        const {field, order} = sortingState;
+        let sortedData = [];
+        if(isArray(internalData[0][field])) {
+            sortedData = orderBy(internalData, (item) => item[field][0], [order]);
+        } else if(isObject(internalData[0][field])) {
+            // todo rethink sorting of object fields
+            sortedData = orderBy(internalData, (item) => item[field].name, [order]);
+        } else {
+            sortedData = orderBy(internalData, [field], [order]);
+        }
+        setInternalData(sortedData);
+    }, [sortingState]);
+
 
     return <Container>
         <TableFilters filtersChange={filtersChange}/>
@@ -80,17 +97,17 @@ export default function MarketDataTable(
             <div className="table-header">
                 {columns && columns.map((item: Column) => <TableHeader
                         sortable={item.sortable}
-                        onSort={(sort: SortingStates) => sortChange(sort, item.dataField)}
+                        onSort={(order: SortingStates) => sortChange(order, item.dataField)}
                         key={uuidV4()}
                         width={item.width}
                         selected={item.dataField === sortingState.field}
-                        sortSelected={item.dataField === sortingState.field ? sortingState.sort : SortingStates.none}
+                        sortSelected={item.dataField === sortingState.field ? sortingState.order : SortingStates.none}
+                        withInfo={item.withInfo}
                     >{item.name}</TableHeader>)
                 }
-                
             </div>
             <div className="table-body">
-                {data.length && data.map((item: any) => <TableRow
+                {internalData.length && internalData.map((item: any) => <TableRow
                     data={item}
                     columns={columns}
                     key={uuidV4()}

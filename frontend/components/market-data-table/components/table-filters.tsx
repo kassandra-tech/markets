@@ -1,8 +1,8 @@
 import TableHeader from "./table-header";
-import FiltersTitle from "../styled/filters-title";
+import FiltersTitleStyles from "../styled/filters-title.styles";
 import styled from "styled-components";
 import {FlexColumn, FlexColumnCentered} from "../../styled-wrappers";
-import FilterButton from "../styled/filter-button";
+import FilterButtonStyles from "../styled/filter-button.styles";
 
 const StyledFiltersContainer = styled.div`
     width: 225px;
@@ -50,15 +50,15 @@ export default function TableFilters({filtersChange}: TableFiltersParams) {
         <StyledFiltersContainer>
             <TableHeader>Time ID</TableHeader>
             <StyledFilterBody>
-                <FiltersTitle />
+                <FiltersTitleStyles />
                 <StyledFilters>
-                    <FilterButton click={selectAll}>All markets</FilterButton>
-                    <FilterButton click={selectFavorites}>Favorites</FilterButton>
-                    <FilterButton click={() => selectFilter('BTC')}>BTC</FilterButton>
-                    <FilterButton click={() => selectFilter('USD')}>USD</FilterButton>
-                    <FilterButton click={() => selectFilter('USDT')}>USDT</FilterButton>
-                    <FilterButton click={() => selectFilter('ETH')}>ETH</FilterButton>
-                    <FilterButton click={() => selectFilter('BNB')}>BNB</FilterButton>
+                    <FilterButtonStyles click={selectAll}>All markets</FilterButtonStyles>
+                    <FilterButtonStyles click={selectFavorites}>Favorites</FilterButtonStyles>
+                    <FilterButtonStyles click={() => selectFilter('BTC')}>BTC</FilterButtonStyles>
+                    <FilterButtonStyles click={() => selectFilter('USD')}>USD</FilterButtonStyles>
+                    <FilterButtonStyles click={() => selectFilter('USDT')}>USDT</FilterButtonStyles>
+                    <FilterButtonStyles click={() => selectFilter('ETH')}>ETH</FilterButtonStyles>
+                    <FilterButtonStyles click={() => selectFilter('BNB')}>BNB</FilterButtonStyles>
                 </StyledFilters>
             </StyledFilterBody>
 

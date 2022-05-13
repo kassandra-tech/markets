@@ -12,7 +12,7 @@ const StyledFiltersTitle = styled(FlexRowCentered)`
   border-radius: 10px 10px 0 0;
 `;
 
-export default function FiltersTitle() {
+export default function FiltersTitleStyles() {
     return (<StyledFiltersTitle>
         <span>Markets</span>
     </StyledFiltersTitle>)

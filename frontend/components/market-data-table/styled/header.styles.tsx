@@ -2,9 +2,10 @@ import styled from "styled-components";
 
 interface StyledHeaderProps {
     width?: number;
+    selected?: boolean;
 }
 
-export const Header = styled.div<StyledHeaderProps>`
+export const HeaderStyles = styled.div<StyledHeaderProps>`
     height: 40px;
     width: ${({width}: StyledHeaderProps) => width ? width + 'px' : 'auto'};
     background: linear-gradient(180deg, #2C3035 0%, #1D1F23 100%);
@@ -15,10 +16,13 @@ export const Header = styled.div<StyledHeaderProps>`
     font-style: normal;
     font-weight: 400;
     font-size: 16px;
-    color: ${props => props.theme.colors.white};
+    color: ${props => props.selected ? props.theme.colors.white : props.theme.colors.grey};
     cursor: pointer;
     min-width: 110px;
     padding: 0  10px;
+    .info {
+      margin-left: 2px;
+    }
     .sorting {
       margin-left: 10px;
       display: flex;

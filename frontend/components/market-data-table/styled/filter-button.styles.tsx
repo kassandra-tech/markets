@@ -25,7 +25,7 @@ export interface FilterButtonProps {
     click: () => void;
 }
 
-export default function FilterButton({click, children}: FilterButtonProps) {
+export default function FilterButtonStyles({click, children}: FilterButtonProps) {
     return <StyledFilterButton onClick={click}>
         {children}
     </StyledFilterButton>
