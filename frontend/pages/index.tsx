@@ -5,9 +5,12 @@ import placeholder from '../public/Header main.png';
 import Head from "next/head";
 import React, {useEffect, useState} from "react";
 import styled from "styled-components";
-import MarketCell from "../components/market-data-table/components/market-cell";
+import MarketCell from "../components/market-data-table/components/cells/market-cell";
 import {Currencies} from "../services/constants";
-import MainMarketCell from "../components/market-data-table/components/main-market-cell";
+import MainMarketCell from "../components/market-data-table/components/cells/main-market-cell";
+import IndicatorCell from "../components/market-data-table/components/cells/indicator-cell";
+import {VolumeCell} from "../components/market-data-table/components/cells/volume-cell";
+import ExchangesCell from "../components/market-data-table/components/cells/exchanges-cell";
 
 const StyledPageContainer = styled.div`
   display: flex;
@@ -48,27 +51,28 @@ const columns = [
     {
         name: 'Range',
         sortable: true,
-        width: 150,
         dataField: 'range',
         cell: MainMarketCell
     },
     {
         name: 'Indicator',
         sortable: true,
-        width: 150,
-        dataField: 'indicator'
+        dataField: 'indicator',
+        cell: IndicatorCell
     },
     {
         name: 'Volume',
         sortable: true,
-        width: 150,
-        dataField: 'volume'
+        width: 200,
+        dataField: 'volume',
+        cell: VolumeCell
     },
     {
         name: 'Exchanges',
         sortable: true,
         width: 210,
-        dataField: 'exchanges'
+        dataField: 'exchanges',
+        cell: ExchangesCell
     },
 ];
 

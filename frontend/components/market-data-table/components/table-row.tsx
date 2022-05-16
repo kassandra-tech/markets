@@ -22,7 +22,6 @@ export default function TableRow(
 
     const [expanded, setExpanded] = useState<boolean>(false);
 
-
     const styles = {
         height: '310px',
         width: '100%'
@@ -33,7 +32,6 @@ export default function TableRow(
             setExpanded(!expanded);
         }
     }
-
 
     return (
         <RowStyles role="button" onClick={rowClick}>
@@ -46,8 +44,7 @@ export default function TableRow(
                     key={uuidV4()}
                     width={item.width}
                 >
-                    {item.dataField !== 'indicator' && data[item.dataField]}
-                    {item.dataField === 'indicator' && <Indicator value={data[item.dataField]}/>}
+                    {data[item.dataField]}
                 </CellStyles>)}
             </FlexRow>
             {expanded && <div style={styles}>

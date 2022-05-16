@@ -25,22 +25,18 @@ export default function TableHeader(
     }: TableHeader
 ) {
 
-    //const [sortingState, setSortingState] = useState<SortingStates>(sortSelected);
     const {colors} = useContext(ThemeContext)
 
     const sort = () => {
 
         if(sortSelected === SortingStates.none) {
-            //setSortingState(SortingStates.asc);
             onSort(SortingStates.asc);
         }
 
         if(sortSelected === SortingStates.asc) {
-            //setSortingState(SortingStates.desc);
             onSort(SortingStates.desc);
         }
         if(sortSelected === SortingStates.desc) {
-            //setSortingState(SortingStates.none);
             onSort(SortingStates.asc);
         }
     }

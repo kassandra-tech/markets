@@ -1,4 +1,4 @@
-import {CellStyles} from "../styled/cell.styles";
+import {CellStyles} from "../../styled/cell.styles";
 import {isArray} from 'lodash';
 
 export default function MainMarketCell(
@@ -23,7 +23,7 @@ export default function MainMarketCell(
         firstVal = value;
     }
 
-    return <CellStyles width={width} direction="column" alignItems="center" justify={isArrayValue ? "space-between" : 'start'}>
+    return <CellStyles width={width} direction="column" alignItems={isArrayValue ? 'start' : 'center'} justify={isArrayValue ? 'space-between' : 'start'}>
         <span className='margin-top'>
             {dataField === 'rank' && <span className="grey-span">#</span>}
             {dataField === 'price' && <svg width="18" height="19" viewBox="0 0 18 19" fill="none" xmlns="http://www.w3.org/2000/svg">
