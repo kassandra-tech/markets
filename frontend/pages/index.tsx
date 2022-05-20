@@ -3,7 +3,7 @@ import MarketDataTable from "../components/market-data-table/market-data-table";
 import Image from 'next/image';
 import placeholder from '../public/Header main.png';
 import Head from "next/head";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import styled from "styled-components";
 import MarketCell from "../components/market-data-table/components/cells/market-cell";
 import {Currencies} from "../services/constants";
@@ -11,6 +11,7 @@ import MainMarketCell from "../components/market-data-table/components/cells/mai
 import IndicatorCell from "../components/market-data-table/components/cells/indicator-cell";
 import {VolumeCell} from "../components/market-data-table/components/cells/volume-cell";
 import ExchangesCell from "../components/market-data-table/components/cells/exchanges-cell";
+import ExpandableRow from "../components/market-data-table/components/expandable-row";
 
 const StyledPageContainer = styled.div`
   display: flex;
@@ -18,7 +19,6 @@ const StyledPageContainer = styled.div`
   align-items: center;
   width: 100%;
 `;
-
 
 const columns = [
     {
@@ -87,7 +87,7 @@ const data = [
         rating: 'AAA',
         price: [39624.49, 39623.13],
         range: [39624.49, 37620.12],
-        indicator: 25,
+        indicator: 55,
         volume: 23669395398.55,
         exchanges: ''
     },
@@ -121,25 +121,20 @@ const data = [
     }
 ]
 
-
 const Home: NextPage = () => {
-
-    const [isSSR, setIsSSR] = useState(true);
-    // https://github.com/vercel/next.js/discussions/35773#discussioncomment-2485078
-    useEffect(() => {
-        setIsSSR(false);
-    }, []);
 
     return (
         <>
             <Head>
                 <title>Cassandra Market</title>
             </Head>
-            {!isSSR && <StyledPageContainer>
+            {<StyledPageContainer>
                 <Image src={placeholder} alt='header'/>
                 <MarketDataTable
                     columns={columns}
                     data={data}
+                    expandable={true}
+                    expandableComponent={ExpandableRow}
                 />
             </StyledPageContainer>}
         </>

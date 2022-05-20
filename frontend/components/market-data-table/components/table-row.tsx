@@ -1,5 +1,5 @@
 import { RowStyles } from "../styled/row.styles";
-import {useState} from "react";
+import {ReactNode, useState} from "react";
 import {FlexRow} from "../../styled-wrappers";
 import {v4 as uuidV4} from "uuid";
 import {CellStyles} from "../styled/cell.styles";
@@ -10,22 +10,19 @@ export interface TableRowProps {
     data: any;
     expandable?: boolean;
     columns: Column[];
+    expandableComponent: any
 }
 
 export default function TableRow(
     {
         data,
         expandable = false,
-        columns = []
+        columns = [],
+        expandableComponent
     }: TableRowProps
 ) {
 
     const [expanded, setExpanded] = useState<boolean>(false);
-
-    const styles = {
-        height: '310px',
-        width: '100%'
-    }
 
     const rowClick = () => {
         if(expandable) {
@@ -47,9 +44,7 @@ export default function TableRow(
                     {data[item.dataField]}
                 </CellStyles>)}
             </FlexRow>
-            {expanded && <div style={styles}>
-                <h1>Expandable</h1>
-            </div>}
+            {expanded && expandableComponent(data)}
         </RowStyles>
 
     )

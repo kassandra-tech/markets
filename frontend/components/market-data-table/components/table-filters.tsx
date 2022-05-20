@@ -3,6 +3,7 @@ import FiltersTitleStyles from "../styled/filters-title.styles";
 import styled from "styled-components";
 import {FlexColumn, FlexColumnCentered} from "../../styled-wrappers";
 import FilterButtonStyles from "../styled/filter-button.styles";
+import {useState} from "react";
 
 const StyledFiltersContainer = styled.div`
     width: 225px;
@@ -31,18 +32,23 @@ export interface TableFiltersParams {
 
 export default function TableFilters({filtersChange}: TableFiltersParams) {
 
+    const [selectedFilter, setSelectedFilter] = useState<string>('all');
+
     const selectAll = () => {
         console.log('select all markets');
+        setSelectedFilter('all');
         filtersChange('all');
     }
 
     const selectFavorites = () => {
         console.log('select favorites');
+        setSelectedFilter('favorites');
         filtersChange('favorites');
     }
 
     const selectFilter = (param: string) => {
         console.log('select filter:', param);
+        setSelectedFilter(param);
         filtersChange(param);
     }
 
@@ -52,13 +58,34 @@ export default function TableFilters({filtersChange}: TableFiltersParams) {
             <StyledFilterBody>
                 <FiltersTitleStyles />
                 <StyledFilters>
-                    <FilterButtonStyles click={selectAll}>All markets</FilterButtonStyles>
-                    <FilterButtonStyles click={selectFavorites}>Favorites</FilterButtonStyles>
-                    <FilterButtonStyles click={() => selectFilter('BTC')}>BTC</FilterButtonStyles>
-                    <FilterButtonStyles click={() => selectFilter('USD')}>USD</FilterButtonStyles>
-                    <FilterButtonStyles click={() => selectFilter('USDT')}>USDT</FilterButtonStyles>
-                    <FilterButtonStyles click={() => selectFilter('ETH')}>ETH</FilterButtonStyles>
-                    <FilterButtonStyles click={() => selectFilter('BNB')}>BNB</FilterButtonStyles>
+                    <FilterButtonStyles
+                        click={selectAll}
+                        selected={selectedFilter === 'all'}
+                    >All markets</FilterButtonStyles>
+                    <FilterButtonStyles
+                        click={selectFavorites}
+                        selected={selectedFilter === 'favorites'}
+                    >Favorites</FilterButtonStyles>
+                    <FilterButtonStyles
+                        click={() => selectFilter('BTC')}
+                        selected={selectedFilter === 'BTC'}
+                    >BTC</FilterButtonStyles>
+                    <FilterButtonStyles
+                        click={() => selectFilter('USD')}
+                        selected={selectedFilter === 'USD'}
+                    >USD</FilterButtonStyles>
+                    <FilterButtonStyles
+                        click={() => selectFilter('USDT')}
+                        selected={selectedFilter === 'USDT'}
+                    >USDT</FilterButtonStyles>
+                    <FilterButtonStyles
+                        click={() => selectFilter('ETH')}
+                        selected={selectedFilter === 'ETH'}
+                    >ETH</FilterButtonStyles>
+                    <FilterButtonStyles
+                        click={() => selectFilter('BNB')}
+                        selected={selectedFilter === 'BNB'}
+                    >BNB</FilterButtonStyles>
                 </StyledFilters>
             </StyledFilterBody>
 

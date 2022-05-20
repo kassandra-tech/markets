@@ -11,3 +11,12 @@ export enum Currencies {
     'mana',
     'vet'
 }
+
+export enum Markets {
+    'Binance',
+    'Crypto.com',
+    'FTX',
+    'Exodus',
+    'Huobi Global',
+    'Coinbase'
+}

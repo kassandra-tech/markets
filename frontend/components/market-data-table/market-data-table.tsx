@@ -4,7 +4,7 @@ import TableFilters from "./components/table-filters";
 import TableHeader from "./components/table-header";
 import {v4 as uuidV4} from 'uuid';
 import {ReactNode, useEffect, useState} from "react";
-import {SortingStates} from "../../services/constants";
+import {Currencies, SortingStates} from "../../services/constants";
 import TableRow from "./components/table-row";
 import {orderBy, isArray, isObject} from 'lodash';
 
@@ -45,18 +45,20 @@ export interface Column {
 }
 
 export interface MarketDataTableProps {
-    columns: Column[],
-    data: any[]
+    columns: Column[];
+    data: any[];
+    expandable: boolean;
+    expandableComponent: any;
 }
 
 export default function MarketDataTable(
     {
         columns = [],
-        data = []
+        data = [],
+        expandable = false,
+        expandableComponent = <div/>
     }: MarketDataTableProps
 ) {
-
-    // const ExpandedComponent = ({ data }: {data: any}) => <pre>{JSON.stringify(data, null, 2)}</pre>;
 
     const [internalData, setInternalData] = useState<any[]>(data);
 
@@ -66,7 +68,8 @@ export default function MarketDataTable(
     })
 
     const filtersChange = (params: any) => {
-         console.log('filter change', params);
+         console.log('filter change', params, Currencies[params.toLocaleString() as keyof typeof Currencies]);
+
     }
 
     const sortChange = (order: SortingStates, field: string) => {
@@ -111,7 +114,8 @@ export default function MarketDataTable(
                     data={item}
                     columns={columns}
                     key={uuidV4()}
-                    expandable={true}
+                    expandable={expandable}
+                    expandableComponent={expandableComponent}
                 />)}
             </div>
 
