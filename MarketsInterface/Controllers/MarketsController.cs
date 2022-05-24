@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-using KassandraMarketsUserActions.Model;
-
-using KassandraWebTest.Kassandra;
+using MarketsInterface.Kassandra;
 
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
