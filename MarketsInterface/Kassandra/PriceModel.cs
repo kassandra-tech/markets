@@ -12,7 +12,7 @@
         /// <param name="market">Market.</param>
         /// <param name="price">Price for the market.</param>
         /// <param name="quotePrice">Reference price for the market.</param>
-        public PriceModel(Exchanges exchange, string market, double price, double quotePrice)
+        public PriceModel(ExchangeType exchange, string market, double price, double quotePrice)
         {
             Exchange = exchange;
             Market = market;
@@ -23,7 +23,7 @@
         /// <summary>
         /// Exchange from supported exchange list to retrieve data from.
         /// </summary>
-        public Exchanges Exchange { get; }
+        public ExchangeType Exchange { get; }
 
         /// <summary>
         /// Market.

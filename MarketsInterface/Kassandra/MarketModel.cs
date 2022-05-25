@@ -6,32 +6,25 @@
     public class MarketModel
     {
         /// <summary>
-        /// Constructor.
+        /// Formatted market string.
         /// </summary>
-        /// <param name="market">Market.</param>
-        public MarketModel(string market)
-        {
-
-        }
+        public string Market => $"{Currency}-{QuoteCurrency}".ToUpper();
 
         /// <summary>
         /// Currency being purchased in the market.
+        /// USD is the currency in the BTC-USD market.
         /// </summary>
-        public string Currency { get; }
+        public string Currency { get; set; }
 
         /// <summary>
         /// Currency being sold in the market.
+        /// BTC is the quote currency in the BTC-USD market.
         /// </summary>
-        public string QuoteCurrency { get; }
+        public string QuoteCurrency { get; set; }
 
         /// <summary>
-        /// Full name of the primary currency in the market.
+        /// Full name of the quote currency in the market.
         /// </summary>
-        public string CurrencyName { get; }
-
-        /// <summary>
-        /// Is the market part of the members market favorite list?
-        /// </summary>
-        public bool IsFavorite { get; set; }
+        public string CurrencyName { get; set; }
     }
 }

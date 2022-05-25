@@ -14,7 +14,7 @@ namespace MarketsInterface.Kassandra
         /// <param name="market">Market.</param>
         /// <param name="startTime">First day in the date range.</param>
         /// <param name="endTime">Last Day in the date range.</param>
-        public PriceRangeModel(Exchanges exchange, string market, DateTime startTime, DateTime endTime)
+        public PriceRangeModel(ExchangeType exchange, string market, DateTime startTime, DateTime endTime)
         {
             Exchange = exchange;
             Market = market;
@@ -25,7 +25,7 @@ namespace MarketsInterface.Kassandra
         /// <summary>
         /// Exchange from supported exchange list to retrieve data from.
         /// </summary>
-        public Exchanges Exchange { get; }
+        public ExchangeType Exchange { get; }
 
         /// <summary>
         /// Market.

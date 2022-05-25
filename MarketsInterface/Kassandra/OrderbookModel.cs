@@ -14,7 +14,7 @@ namespace MarketsInterface.Kassandra
         /// <param name="market">Market for the orderbook.</param>
         /// <param name="buys">Current buy orders for the market.</param>
         /// <param name="sells">Current sell orders for the market.</param>
-        public OrderbookModel(Exchanges exchange, string market, List<OrderModel> buys, List<OrderModel> sells)
+        public OrderbookModel(ExchangeType exchange, string market, List<OrderModel> buys, List<OrderModel> sells)
         {
             Exchange = exchange;
             Market = market;
@@ -25,7 +25,7 @@ namespace MarketsInterface.Kassandra
         /// <summary>
         /// Exchange from supported exchange list to retrieve data from.
         /// </summary>
-        public Exchanges Exchange { get; }
+        public ExchangeType Exchange { get; }
 
         /// <summary>
         /// Market for the orderbook.

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
+using MarketsInterface.Exchanges;
 using MarketsInterface.Kassandra;
 
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 namespace MarketsInterface.Controllers
 {
@@ -12,16 +14,14 @@ namespace MarketsInterface.Controllers
     /// APIs to support Kassandra markets.
     /// </summary>
     [ApiController]
-    [Route("[controller]")]
-    public class MarketsController : ControllerBase
+    [Route("market")]
+    public class MarketController : ControllerBase
     {
         /// <summary>
         /// Constructor.
         /// </summary>
-        /// <param name="logger">Log output for the controller.</param>
-        public MarketsController(ILogger<MarketsController> logger)
+        public MarketController()
         {
-            _logger = logger;
         }
 
         /// <summary>
@@ -31,41 +31,62 @@ namespace MarketsInterface.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("markets")]
-        public List<MarketModel> Markets(Exchanges exchange = 0)
+        public async Task<List<MarketModel>> Markets(ExchangeType exchange = 0)
         {
-            return new List<MarketModel>();
-        }
-
-        /// <summary>
-        /// Get current orderbook for open buy and sell orders for the given market on the selected exchange.
-        /// </summary>
-        /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
-        /// <param name="market">Market to retrieve data from.</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("orderbook")]
-        public OrderbookModel Orderbook(Exchanges exchange, string market)
-        {
-            var orders = new List<OrderModel>();
-            
-            return new OrderbookModel(exchange, market, orders, orders);
+            switch (exchange)
+            {
+                case ExchangeType.Binance:
+                    {
+                        return await Binance.GetMarkets();
+                    }
+                case ExchangeType.Coinbase:
+                    {
+                        return await Coinbase.GetMarkets();
+                    }
+                case ExchangeType.KuCoin:
+                    {
+                        return await KuCoin.GetMarkets();
+                    }
+                case ExchangeType.HuobiGlobal:
+                    {
+                        return await HuobiGlobal.GetMarkets();
+                    }
+                case ExchangeType.FTX:
+                    {
+                        return await Ftx.GetMarkets();
+                    }
+                case ExchangeType.Kraken:
+                    {
+                        return await Kraken.GetMarkets();
+                    }
+                case ExchangeType.Bittrex:
+                    {
+                        return await Bittrex.GetMarkets();
+                    }
+                    default:
+                    {
+                        return new List<MarketModel>();
+                    }
+                }
         }
 
         /// <summary>
         /// Get market price for the given market on the selected exchange.
+        /// NOTE: This is not returning price data at this time.
         /// </summary>
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
         /// <param name="market">Market to retrieve data from.</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("market/price")]
-        public PriceModel Price(Exchanges exchange, string market)
+        [Route("price")]
+        public PriceModel Price(ExchangeType exchange, string market)
         {
             return new PriceModel(exchange, market, 0, 0);
         }
 
         /// <summary>
         /// Get the market price range for the given timeframe.
+        /// NOTE: This is not returning price range data at this time.
         /// </summary>
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
         /// <param name="market">Market to retrieve data from.</param>
@@ -73,8 +94,8 @@ namespace MarketsInterface.Controllers
         /// <param name="endTime">Last Day in the date range.</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("market/price/range")]
-        public PriceRangeModel PriceRange(Exchanges exchange, string market, DateTime startTime, DateTime endTime)
+        [Route("price-range")]
+        public PriceRangeModel PriceRange(ExchangeType exchange, string market, DateTime startTime, DateTime endTime)
         {
             return new PriceRangeModel(exchange, market, startTime, endTime);
         }
@@ -82,19 +103,21 @@ namespace MarketsInterface.Controllers
         /// <summary>
         /// Get the volume for a given market.
         /// If an exchange is passed the volume for the given exchange will be returned.
+        /// NOTE: This is not returning volume data at this time.
         /// </summary>
         /// <param name="market">Market to retrieve data from.</param>
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("market/volume")]
-        public double Volume(string market, Exchanges exchange = 0)
+        [Route("volume")]
+        public double Volume(string market, ExchangeType exchange = 0)
         {
             return 0;
         }
 
         /// <summary>
         /// Determine the current market price value compared to the given date range.
+        /// NOTE: This is not returning price indicator data at this time.
         /// </summary>
         /// <param name="market">Market to retrieve data from.</param>
         /// <param name="startTime">First day in the date range.</param>
@@ -102,33 +125,22 @@ namespace MarketsInterface.Controllers
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("market/price/indicator")]
-        public PriceIndicatorModel PriceIndicator(string market, DateTime startTime, DateTime endTime, Exchanges exchange = 0)
+        [Route("price-indicator")]
+        public PriceIndicatorModel PriceIndicator(string market, DateTime startTime, DateTime endTime, ExchangeType exchange = 0)
         {
             return new PriceIndicatorModel(market, startTime, endTime, exchange);
         }
 
         /// <summary>
-        /// Exchange states for a given market.
-        /// </summary>
-        /// <param name="market">Market to retrieve data from.</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("market/exchanges")]
-        public MarketModel Exchanges(string market)
-        {
-            return new MarketModel(market);
-        }
-
-        /// <summary>
         /// Get the rank of the given market.
+        /// NOTE: This is returning random rank data at this time.
         /// </summary>
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
         /// <param name="currency">Currency to get the rank of.</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("market/rank")]
-        public int Rank(Exchanges exchange, string currency)
+        [Route("rank")]
+        public int Rank(ExchangeType exchange, string currency)
         {
             var random = new Random();
 
@@ -137,17 +149,38 @@ namespace MarketsInterface.Controllers
 
         /// <summary>
         /// Get the rating of the given currency.
+        /// NOTE: This is returning random rating data at this time.
         /// </summary>
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
         /// <param name="currency">Currency to get the rating of.</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("market/rating")]
-        public string Rating(Exchanges exchange, string currency)
+        [Route("rating")]
+        public string Rating(ExchangeType exchange, string currency)
         {
-            return "A";
+            var random = new Random();
+            var ratings = new List<string> { "A", "B", "C", "D", "E", "F" };
+
+            return ratings[random.Next(ratings.Count)];
         }
 
-        private readonly ILogger<MarketsController> _logger;
+        /// <summary>
+        /// Get Exchanges associated with Markets.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("exchanges")]
+        public ConcurrentDictionary<string, List<ExchangeType>> MarketExchanges()
+        {
+            return ExchangeBase.MarketExchanges;
+        }
+
+        private Binance Binance = new Binance();
+        private Coinbase Coinbase = new Coinbase();
+        private KuCoin KuCoin = new KuCoin();
+        private HuobiGlobal HuobiGlobal = new HuobiGlobal();
+        private Ftx Ftx = new Ftx();
+        private Kraken Kraken = new Kraken();
+        private Bittrex Bittrex = new Bittrex();
     }
 }

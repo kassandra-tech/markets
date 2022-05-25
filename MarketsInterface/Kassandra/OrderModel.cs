@@ -23,7 +23,7 @@
         /// <summary>
         /// ExchangeType the order was placed on.
         /// </summary>
-        public Exchanges Exchange { get; set; }
+        public ExchangeType Exchange { get; set; }
 
         /// <summary>
         /// Type of trade.
