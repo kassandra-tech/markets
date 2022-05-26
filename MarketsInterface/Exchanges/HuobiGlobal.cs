@@ -43,5 +43,6 @@ namespace MarketsInterface.Exchanges
         internal override string BaseAddress => "https://api.huobi.pro";
         internal override string MarketInformation => "v2/settings/common/symbols";
         internal override string CurrencyInformation => "v2/settings/common/currencies";
+        internal override string PriceInformation => string.Empty;
     }
 }

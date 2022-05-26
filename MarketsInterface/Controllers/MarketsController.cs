@@ -67,7 +67,7 @@ namespace MarketsInterface.Controllers
                     {
                         return new List<MarketModel>();
                     }
-                }
+            }
         }
 
         /// <summary>
@@ -75,29 +75,88 @@ namespace MarketsInterface.Controllers
         /// NOTE: This is not returning price data at this time.
         /// </summary>
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
-        /// <param name="market">Market to retrieve data from.</param>
         /// <returns></returns>
         [HttpGet]
         [Route("price")]
-        public PriceModel Price(ExchangeType exchange, string market)
+        public async Task<List<PriceModel>> Price(ExchangeType exchange)
         {
-            return new PriceModel(exchange, market, 0, 0);
+            switch (exchange)
+            {
+                case ExchangeType.Binance:
+                    {
+                        return await Binance.GetPrices();
+                    }
+                case ExchangeType.FTX:
+                    {
+                        return await Ftx.GetPrices();
+                    }
+                case ExchangeType.Bittrex:
+                    {
+                        return await Bittrex.GetPrices();
+                    }
+                default:
+                    {
+                        return new List<PriceModel>();
+                    }
+            }
         }
 
         /// <summary>
         /// Get the market price range for the given timeframe.
-        /// NOTE: This is not returning price range data at this time.
+        /// NOTE: This is not accurate price range data. Random values are generated based on the current price for testing purposes.
         /// </summary>
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
-        /// <param name="market">Market to retrieve data from.</param>
         /// <param name="startTime">First day in the date range.</param>
         /// <param name="endTime">Last Day in the date range.</param>
         /// <returns></returns>
         [HttpGet]
         [Route("price-range")]
-        public PriceRangeModel PriceRange(ExchangeType exchange, string market, DateTime startTime, DateTime endTime)
+        public async Task<List<PriceRangeModel>> PriceRange(ExchangeType exchange, DateTime startTime, DateTime endTime)
         {
-            return new PriceRangeModel(exchange, market, startTime, endTime);
+            var priceRanges = new List<PriceRangeModel>();
+            List<PriceModel> prices;
+
+            switch (exchange)
+            {
+                case ExchangeType.Binance:
+                    {
+                        prices = await Binance.GetPrices();
+                        break;
+                    }
+                case ExchangeType.FTX:
+                    {
+                        prices = await Ftx.GetPrices();
+                        break;
+                    }
+                case ExchangeType.Bittrex:
+                    {
+                        prices = await Bittrex.GetPrices();
+                        break;
+                    }
+                default:
+                    {
+                        return new List<PriceRangeModel>();
+                    }
+            }
+
+            foreach (var price in prices)
+            {
+                var random = new Random();
+
+                var model = new PriceRangeModel(exchange)
+                {
+                    Market = price.Market,
+                    StartTime = startTime,
+                    EndTime = endTime,
+                    Price = price.Price,
+                    LowPrice = random.NextDouble() * (price.Price - price.Price * 0.8) + price.Price * 0.8,
+                    HighPrice = random.NextDouble() * (price.Price * 1.2 - price.Price) + price.Price
+                };
+
+                priceRanges.Add(model);
+            }
+
+            return priceRanges;
         }
 
         /// <summary>
@@ -105,14 +164,56 @@ namespace MarketsInterface.Controllers
         /// If an exchange is passed the volume for the given exchange will be returned.
         /// NOTE: This is not returning volume data at this time.
         /// </summary>
-        /// <param name="market">Market to retrieve data from.</param>
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
+        /// <param name="startTime">First day in the date range.</param>
+        /// <param name="endTime">Last Day in the date range.</param>
         /// <returns></returns>
         [HttpGet]
         [Route("volume")]
-        public double Volume(string market, ExchangeType exchange = 0)
+        public async Task<List<PriceVolumeModel>> Volume(ExchangeType exchange, DateTime startTime, DateTime endTime)
         {
-            return 0;
+            List<PriceModel> prices;
+            var volumes = new List<PriceVolumeModel>();
+
+            switch (exchange)
+            {
+                case ExchangeType.Binance:
+                    {
+                        prices = await Binance.GetPrices();
+                        break;
+                    }
+                case ExchangeType.FTX:
+                    {
+                        prices = await Ftx.GetPrices();
+                        break;
+                    }
+                case ExchangeType.Bittrex:
+                    {
+                        prices = await Bittrex.GetPrices();
+                        break;
+                    }
+                default:
+                    {
+                        return new List<PriceVolumeModel>();
+                    }
+            }
+
+            foreach (var price in prices)
+            {
+                var random = new Random();
+
+                var model = new PriceVolumeModel(exchange)
+                {
+                    Market = price.Market,
+                    StartTime = startTime,
+                    EndTime = endTime,
+                    Volume = random.NextDouble() * price.Price * 10000
+                };
+
+                volumes.Add(model);
+            }
+
+            return volumes;
         }
 
         /// <summary>

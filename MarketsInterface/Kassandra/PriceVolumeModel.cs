@@ -5,13 +5,13 @@ namespace MarketsInterface.Kassandra
     /// <summary>
     /// Market price information.
     /// </summary>
-    public class PriceRangeModel
+    public class PriceVolumeModel
     {
         /// <summary>
         /// Constructor.
         /// </summary>
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
-        public PriceRangeModel(ExchangeType exchange)
+        public PriceVolumeModel(ExchangeType exchange)
         {
             Exchange = exchange;
         }
@@ -39,16 +39,6 @@ namespace MarketsInterface.Kassandra
         /// <summary>
         /// Get the last market price.
         /// </summary>
-        public double Price { get; set; }
-
-        /// <summary>
-        /// Lowest price in the time range.
-        /// </summary>
-        public double LowPrice { get; set; }
-
-        /// <summary>
-        /// Highest price in the time range.
-        /// </summary>
-        public double HighPrice { get; set; }
+        public double Volume { get; set; }
     }
 }

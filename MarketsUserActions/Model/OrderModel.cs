@@ -30,7 +30,7 @@ namespace KassandraMarketsUserActions.Model
         /// <summary>
         /// Type of trade.
         /// </summary>
-        public TradeActionModel Action { get; set; }
+        public TradeAction Action { get; set; }
 
         /// <summary>
         /// Market the order was placed in.

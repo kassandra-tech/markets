@@ -24,8 +24,18 @@ namespace MarketsInterface.Exchanges
             return await GetMarkets("baseCurrencySymbol", "quoteCurrencySymbol");
         }
 
+        /// <summary>
+        /// Get current prices for supported markets.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<PriceModel>> GetPrices()
+        {
+            return await GetPrices("symbol", "lastTradeRate");
+        }
+
         internal override string BaseAddress => "https://api.bittrex.com/v3";
         internal override string MarketInformation => "markets";
-        internal override string CurrencyInformation => "";
+        internal override string CurrencyInformation => string.Empty;
+        internal override string PriceInformation => "markets/tickers";
     }
 }

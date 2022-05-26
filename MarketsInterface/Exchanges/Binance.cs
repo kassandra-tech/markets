@@ -24,8 +24,18 @@ namespace MarketsInterface.Exchanges
             return await GetMarkets("baseAsset", "quoteAsset", "symbols");
         }
 
+        /// <summary>
+        /// Get current prices for supported markets.
+        /// </summary>
+        /// <returns></returns>
+        public async Task<List<PriceModel>> GetPrices()
+        {
+            return await GetPrices("symbol", "price");
+        }
+
         internal override string BaseAddress => "https://api.binance.com/api/v3";
         internal override string MarketInformation => "exchangeInfo";
         internal override string CurrencyInformation => string.Empty;
+        internal override string PriceInformation => "ticker/price";
     }
 }

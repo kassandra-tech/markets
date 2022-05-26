@@ -43,5 +43,6 @@ namespace MarketsInterface.Exchanges
         internal override string BaseAddress => "https://api.exchange.coinbase.com";
         internal override string CurrencyInformation => "currencies";
         internal override string MarketInformation => "products";
+        internal override string PriceInformation => string.Empty;
     }
 }

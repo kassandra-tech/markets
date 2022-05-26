@@ -1,4 +1,5 @@
-﻿using System.Collections.Concurrent;
+﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -93,9 +94,43 @@ namespace MarketsInterface.Exchanges
             return list;
         }
 
+        /// <summary>
+        /// Get price information.
+        /// </summary>
+        /// <param name="marketString">Market string reference.</param>
+        /// <param name="priceString">Price string reference.</param>
+        /// <param name="baseNode">Base node of info in the response structure.</param>
+        /// <returns></returns>
+        public async Task<List<PriceModel>> GetPrices(string marketString, string priceString, string baseNode = "")
+        {
+            List<PriceModel> list = new();
+
+            using (var client = new RestClient(BaseAddress))
+            {
+                var request = new RestRequest(PriceInformation);
+
+                var info = await client.GetAsync(request);
+                var products = string.IsNullOrEmpty(baseNode) ? JsonConvert.DeserializeObject<JArray>(info.Content) : JsonConvert.DeserializeObject<JObject>(info.Content)[baseNode];
+
+                foreach (var market in products)
+                {
+                    var model = new PriceModel
+                    {
+                        Exchange = Exchange,
+                        Market = market[marketString].ToString(),
+                        Price = Convert.ToDouble(market[priceString])
+                    };
+                    list.Add(model);
+                }
+            }
+
+            return list;
+        }
+
         internal abstract string BaseAddress { get; }
         internal abstract string CurrencyInformation { get; }
         internal abstract string MarketInformation { get; }
+        internal abstract string PriceInformation { get; }
 
         internal static ConcurrentDictionary<string, string> Currencies = new ConcurrentDictionary<string, string>();
         internal static ConcurrentDictionary<string, List<ExchangeType>> MarketExchanges = new ConcurrentDictionary<string, List<ExchangeType>>();

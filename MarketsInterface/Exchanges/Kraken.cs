@@ -53,6 +53,7 @@ namespace MarketsInterface.Exchanges
 
         internal override string BaseAddress => "https://api.kraken.com/0/public";
         internal override string MarketInformation => "AssetPairs";
-        internal override string CurrencyInformation => "";
+        internal override string CurrencyInformation => string.Empty;
+        internal override string PriceInformation => string.Empty;
     }
 }

@@ -43,5 +43,6 @@ namespace MarketsInterface.Exchanges
         internal override string BaseAddress => "https://api.kucoin.com";
         internal override string MarketInformation => "api/v1/symbols";
         internal override string CurrencyInformation => "/api/v1/currencies";
+        internal override string PriceInformation => string.Empty;
     }
 }

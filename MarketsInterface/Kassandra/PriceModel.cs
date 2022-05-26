@@ -6,38 +6,23 @@
     public class PriceModel
     {
         /// <summary>
-        /// Constructor.
-        /// </summary>
-        /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
-        /// <param name="market">Market.</param>
-        /// <param name="price">Price for the market.</param>
-        /// <param name="quotePrice">Reference price for the market.</param>
-        public PriceModel(ExchangeType exchange, string market, double price, double quotePrice)
-        {
-            Exchange = exchange;
-            Market = market;
-            Price = price;
-            QuotePrice = quotePrice;
-        }
-
-        /// <summary>
         /// Exchange from supported exchange list to retrieve data from.
         /// </summary>
-        public ExchangeType Exchange { get; }
+        public ExchangeType Exchange { get; set; }
 
         /// <summary>
         /// Market.
         /// </summary>
-        public string Market { get; }
+        public string Market { get; set; }
 
         /// <summary>
         /// Price for the market.
         /// </summary>
-        public double Price { get; }
+        public double Price { get; set; }
 
         /// <summary>
         /// Reference price for the market.
         /// </summary>
-        public double QuotePrice { get; }
+        public double QuotePrice { get; set; }
     }
 }
