@@ -1,9 +1,9 @@
-﻿namespace MarketsInterface.Kassandra
+﻿namespace MarketsInterface.Enums
 {
     /// <summary>
     /// Supported exchanges.
     /// </summary>
-    public enum ExchangeType
+    public enum Exchanges
     {
         /// <summary>
         /// Binance

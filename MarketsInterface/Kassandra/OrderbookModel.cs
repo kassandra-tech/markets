@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 
+using MarketsInterface.Enums;
+
 namespace MarketsInterface.Kassandra
 {
     /// <summary>
@@ -14,7 +16,7 @@ namespace MarketsInterface.Kassandra
         /// <param name="market">Market for the orderbook.</param>
         /// <param name="buys">Current buy orders for the market.</param>
         /// <param name="sells">Current sell orders for the market.</param>
-        public OrderbookModel(ExchangeType exchange, string market, List<OrderModel> buys, List<OrderModel> sells)
+        public OrderbookModel(Enums.Exchanges exchange, string market, List<OrderModel> buys, List<OrderModel> sells)
         {
             Exchange = exchange;
             Market = market;
@@ -25,7 +27,7 @@ namespace MarketsInterface.Kassandra
         /// <summary>
         /// Exchange from supported exchange list to retrieve data from.
         /// </summary>
-        public ExchangeType Exchange { get; }
+        public Enums.Exchanges Exchange { get; }
 
         /// <summary>
         /// Market for the orderbook.

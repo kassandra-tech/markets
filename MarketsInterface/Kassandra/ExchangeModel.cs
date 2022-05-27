@@ -1,4 +1,6 @@
-﻿namespace MarketsInterface.Kassandra
+﻿using MarketsInterface.Enums;
+
+namespace MarketsInterface.Kassandra
 {
     /// <summary>
     /// Data for viewing exchange information by member selection.
@@ -11,7 +13,7 @@
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
         /// <param name="connected">Does the member have an account connected for the exchange?</param>
         /// <param name="enabled">Has the member decided to view the current excahnge?</param>
-        public ExchangeModel(ExchangeType exchange, bool connected, bool enabled)
+        public ExchangeModel(Enums.Exchanges exchange, bool connected, bool enabled)
         {
             Exchange = exchange;
             Connected = connected;
@@ -21,7 +23,7 @@
         /// <summary>
         /// Exchange from supported exchange list to retrieve data from.
         /// </summary>
-        public ExchangeType Exchange { get; }
+        public Enums.Exchanges Exchange { get; }
 
         /// <summary>
         /// Does the member have an account connected for the exchange?

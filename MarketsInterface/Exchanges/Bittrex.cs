@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using MarketsInterface.Enums;
 using MarketsInterface.Kassandra;
 
 namespace MarketsInterface.Exchanges
@@ -13,7 +14,7 @@ namespace MarketsInterface.Exchanges
         /// <summary>
         /// Exchange name reference.
         /// </summary>
-        public override ExchangeType Exchange => ExchangeType.Bittrex;
+        public override Enums.Exchanges Exchange => Enums.Exchanges.Bittrex;
 
         /// <summary>
         /// Get available markets.

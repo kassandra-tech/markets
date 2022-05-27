@@ -1,5 +1,7 @@
 ﻿using System;
 
+using MarketsInterface.Enums;
+
 namespace MarketsInterface.Kassandra
 {
     /// <summary>
@@ -14,7 +16,7 @@ namespace MarketsInterface.Kassandra
         /// <param name="startTime">First day in the date range.</param>
         /// <param name="endTime">Last Day in the date range.</param>
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
-        public PriceIndicatorModel(string market, DateTime startTime, DateTime endTime, ExchangeType exchange = 0)
+        public PriceIndicatorModel(string market, DateTime startTime, DateTime endTime, Enums.Exchanges exchange = 0)
         {
             Exchange = exchange;
             Market = market;
@@ -25,7 +27,7 @@ namespace MarketsInterface.Kassandra
         /// <summary>
         /// Exchange from supported exchange list to retrieve data from.
         /// </summary>
-        public ExchangeType Exchange { get; }
+        public Enums.Exchanges Exchange { get; }
 
         /// <summary>
         /// Market.

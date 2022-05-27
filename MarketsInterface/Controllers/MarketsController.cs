@@ -31,35 +31,35 @@ namespace MarketsInterface.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("markets")]
-        public async Task<List<MarketModel>> Markets(ExchangeType exchange = 0)
+        public async Task<List<MarketModel>> Markets(Enums.Exchanges exchange = 0)
         {
             switch (exchange)
             {
-                case ExchangeType.Binance:
+                case Enums.Exchanges.Binance:
                     {
                         return await Binance.GetMarkets();
                     }
-                case ExchangeType.Coinbase:
+                case Enums.Exchanges.Coinbase:
                     {
                         return await Coinbase.GetMarkets();
                     }
-                case ExchangeType.KuCoin:
+                case Enums.Exchanges.KuCoin:
                     {
                         return await KuCoin.GetMarkets();
                     }
-                case ExchangeType.HuobiGlobal:
+                case Enums.Exchanges.HuobiGlobal:
                     {
                         return await HuobiGlobal.GetMarkets();
                     }
-                case ExchangeType.FTX:
+                case Enums.Exchanges.FTX:
                     {
                         return await Ftx.GetMarkets();
                     }
-                case ExchangeType.Kraken:
+                case Enums.Exchanges.Kraken:
                     {
                         return await Kraken.GetMarkets();
                     }
-                case ExchangeType.Bittrex:
+                case Enums.Exchanges.Bittrex:
                     {
                         return await Bittrex.GetMarkets();
                     }
@@ -78,19 +78,19 @@ namespace MarketsInterface.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("price")]
-        public async Task<List<PriceModel>> Price(ExchangeType exchange)
+        public async Task<List<PriceModel>> Price(Enums.Exchanges exchange)
         {
             switch (exchange)
             {
-                case ExchangeType.Binance:
+                case Enums.Exchanges.Binance:
                     {
                         return await Binance.GetPrices();
                     }
-                case ExchangeType.FTX:
+                case Enums.Exchanges.FTX:
                     {
                         return await Ftx.GetPrices();
                     }
-                case ExchangeType.Bittrex:
+                case Enums.Exchanges.Bittrex:
                     {
                         return await Bittrex.GetPrices();
                     }
@@ -111,24 +111,24 @@ namespace MarketsInterface.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("price-range")]
-        public async Task<List<PriceRangeModel>> PriceRange(ExchangeType exchange, DateTime startTime, DateTime endTime)
+        public async Task<List<PriceRangeModel>> PriceRange(Enums.Exchanges exchange, DateTime startTime, DateTime endTime)
         {
             var priceRanges = new List<PriceRangeModel>();
             List<PriceModel> prices;
 
             switch (exchange)
             {
-                case ExchangeType.Binance:
+                case Enums.Exchanges.Binance:
                     {
                         prices = await Binance.GetPrices();
                         break;
                     }
-                case ExchangeType.FTX:
+                case Enums.Exchanges.FTX:
                     {
                         prices = await Ftx.GetPrices();
                         break;
                     }
-                case ExchangeType.Bittrex:
+                case Enums.Exchanges.Bittrex:
                     {
                         prices = await Bittrex.GetPrices();
                         break;
@@ -170,24 +170,24 @@ namespace MarketsInterface.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("volume")]
-        public async Task<List<PriceVolumeModel>> Volume(ExchangeType exchange, DateTime startTime, DateTime endTime)
+        public async Task<List<PriceVolumeModel>> Volume(Enums.Exchanges exchange, DateTime startTime, DateTime endTime)
         {
             List<PriceModel> prices;
             var volumes = new List<PriceVolumeModel>();
 
             switch (exchange)
             {
-                case ExchangeType.Binance:
+                case Enums.Exchanges.Binance:
                     {
                         prices = await Binance.GetPrices();
                         break;
                     }
-                case ExchangeType.FTX:
+                case Enums.Exchanges.FTX:
                     {
                         prices = await Ftx.GetPrices();
                         break;
                     }
-                case ExchangeType.Bittrex:
+                case Enums.Exchanges.Bittrex:
                     {
                         prices = await Bittrex.GetPrices();
                         break;
@@ -227,7 +227,7 @@ namespace MarketsInterface.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("price-indicator")]
-        public PriceIndicatorModel PriceIndicator(string market, DateTime startTime, DateTime endTime, ExchangeType exchange = 0)
+        public PriceIndicatorModel PriceIndicator(string market, DateTime startTime, DateTime endTime, Enums.Exchanges exchange = 0)
         {
             return new PriceIndicatorModel(market, startTime, endTime, exchange);
         }
@@ -241,7 +241,7 @@ namespace MarketsInterface.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("rank")]
-        public int Rank(ExchangeType exchange, string currency)
+        public int Rank(Enums.Exchanges exchange, string currency)
         {
             var random = new Random();
 
@@ -257,7 +257,7 @@ namespace MarketsInterface.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("rating")]
-        public string Rating(ExchangeType exchange, string currency)
+        public string Rating(Enums.Exchanges exchange, string currency)
         {
             var random = new Random();
             var ratings = new List<string> { "A", "B", "C", "D", "E", "F" };
@@ -271,7 +271,7 @@ namespace MarketsInterface.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("exchanges")]
-        public ConcurrentDictionary<string, List<ExchangeType>> MarketExchanges()
+        public ConcurrentDictionary<string, List<Enums.Exchanges>> MarketExchanges()
         {
             return ExchangeBase.MarketExchanges;
         }

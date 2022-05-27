@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using MarketsInterface.Enums;
 using MarketsInterface.Kassandra;
 
 namespace MarketsInterface.Exchanges
@@ -21,7 +22,7 @@ namespace MarketsInterface.Exchanges
         /// <summary>
         /// Exchange name reference.
         /// </summary>
-        public override ExchangeType Exchange => ExchangeType.HuobiGlobal;
+        public override Enums.Exchanges Exchange => Enums.Exchanges.HuobiGlobal;
 
         /// <summary>
         /// Update currency information.

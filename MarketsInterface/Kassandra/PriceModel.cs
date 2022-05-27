@@ -1,4 +1,6 @@
-﻿namespace MarketsInterface.Kassandra
+﻿using MarketsInterface.Enums;
+
+namespace MarketsInterface.Kassandra
 {
     /// <summary>
     /// Market price information.
@@ -8,7 +10,7 @@
         /// <summary>
         /// Exchange from supported exchange list to retrieve data from.
         /// </summary>
-        public ExchangeType Exchange { get; set; }
+        public Enums.Exchanges Exchange { get; set; }
 
         /// <summary>
         /// Market.

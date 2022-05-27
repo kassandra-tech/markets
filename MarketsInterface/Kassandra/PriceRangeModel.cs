@@ -1,5 +1,7 @@
 ﻿using System;
 
+using MarketsInterface.Enums;
+
 namespace MarketsInterface.Kassandra
 {
     /// <summary>
@@ -11,7 +13,7 @@ namespace MarketsInterface.Kassandra
         /// Constructor.
         /// </summary>
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
-        public PriceRangeModel(ExchangeType exchange)
+        public PriceRangeModel(Enums.Exchanges exchange)
         {
             Exchange = exchange;
         }
@@ -19,7 +21,7 @@ namespace MarketsInterface.Kassandra
         /// <summary>
         /// Exchange from supported exchange list to retrieve data from.
         /// </summary>
-        public ExchangeType Exchange { get; }
+        public Enums.Exchanges Exchange { get; }
 
         /// <summary>
         /// Market.

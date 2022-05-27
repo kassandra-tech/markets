@@ -2,7 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 
+using MarketsInterface.Enums;
 using MarketsInterface.Kassandra;
+
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -18,7 +20,7 @@ namespace MarketsInterface.Exchanges
         /// <summary>
         /// Exchange name reference.
         /// </summary>
-        public override ExchangeType Exchange => ExchangeType.Kraken;
+        public override Enums.Exchanges Exchange => Enums.Exchanges.Kraken;
 
         /// <summary>
         /// Get available markets.

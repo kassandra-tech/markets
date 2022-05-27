@@ -3,6 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
+using MarketsInterface.Enums;
 using MarketsInterface.Kassandra;
 
 using Newtonsoft.Json;
@@ -20,7 +21,7 @@ namespace MarketsInterface.Exchanges
         /// <summary>
         /// Exchange name reference.
         /// </summary>
-        public abstract ExchangeType Exchange { get; }
+        public abstract Enums.Exchanges Exchange { get; }
 
         /// <summary>
         /// Update currency information.
@@ -80,7 +81,7 @@ namespace MarketsInterface.Exchanges
 
                     if (!MarketExchanges.ContainsKey(model.Market))
                     {
-                        var tempList = new List<ExchangeType>();
+                        var tempList = new List<Enums.Exchanges>();
                         tempList.Add(Exchange);
                         MarketExchanges.TryAdd(model.Market, tempList);
                     }
@@ -133,6 +134,6 @@ namespace MarketsInterface.Exchanges
         internal abstract string PriceInformation { get; }
 
         internal static ConcurrentDictionary<string, string> Currencies = new ConcurrentDictionary<string, string>();
-        internal static ConcurrentDictionary<string, List<ExchangeType>> MarketExchanges = new ConcurrentDictionary<string, List<ExchangeType>>();
+        internal static ConcurrentDictionary<string, List<Enums.Exchanges>> MarketExchanges = new ConcurrentDictionary<string, List<Enums.Exchanges>>();
     }
 }

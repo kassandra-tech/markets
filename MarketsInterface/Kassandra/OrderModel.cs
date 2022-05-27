@@ -1,4 +1,6 @@
-﻿namespace MarketsInterface.Kassandra
+﻿using MarketsInterface.Enums;
+
+namespace MarketsInterface.Kassandra
 {
     /// <summary>
     /// Order data representation.
@@ -23,7 +25,7 @@
         /// <summary>
         /// ExchangeType the order was placed on.
         /// </summary>
-        public ExchangeType Exchange { get; set; }
+        public Enums.Exchanges Exchange { get; set; }
 
         /// <summary>
         /// Type of trade.
