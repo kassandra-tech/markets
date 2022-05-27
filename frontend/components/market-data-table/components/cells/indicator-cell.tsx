@@ -35,8 +35,6 @@ export default function IndicatorCell({width, value}: IndicatorCellProps) {
     const isBuy = value < 40;
     const isStrongBuy = value > 20 && value < 40;
     const color = isBuy ? colors.cryptoGreen : isSell ? colors.superRed : colors.yellow;
-    console.log('isSell', isSell, 'isBuy', isBuy, color);
-
     const justify =  isBuy ? 'start' : isSell ? 'end' : 'center';
 
     return <CellStyles width={width} direction="column">

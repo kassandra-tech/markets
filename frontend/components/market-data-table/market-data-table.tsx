@@ -1,12 +1,12 @@
 import styled from 'styled-components';
 import {FlexColumn} from "../styled-wrappers";
-import TableFilters from "./components/table-filters";
+import TableFilters, {baseFilterValues, TableFilter} from "./components/table-filters";
 import TableHeader from "./components/table-header";
 import {v4 as uuidV4} from 'uuid';
-import {ReactNode, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {Currencies, SortingStates} from "../../services/constants";
 import TableRow from "./components/table-row";
-import {orderBy, isArray, isObject} from 'lodash';
+import {orderBy, isArray, isObject, forOwn} from 'lodash';
 
 const Container = styled.main`
       display: flex;
@@ -49,6 +49,8 @@ export interface MarketDataTableProps {
     data: any[];
     expandable: boolean;
     expandableComponent: any;
+    filterField: string;
+    filters: TableFilter[];
 }
 
 export default function MarketDataTable(
@@ -56,20 +58,43 @@ export default function MarketDataTable(
         columns = [],
         data = [],
         expandable = false,
-        expandableComponent = <div/>
+        expandableComponent = <div/>,
+        filterField,
+        filters
     }: MarketDataTableProps
 ) {
 
     const [internalData, setInternalData] = useState<any[]>(data);
+    const [visibleData, setVisibleData] = useState<any[]>(data);
 
     const [sortingState, setSortingState] = useState<any>({
         order: SortingStates.none,
         field: ''
     })
 
-    const filtersChange = (params: any) => {
-         console.log('filter change', params, Currencies[params.toLocaleString() as keyof typeof Currencies]);
+    const filtersChange = (value: any) => {
+        if(value === baseFilterValues.all) {
+            return setVisibleData(internalData);
+        }
 
+        if(value === baseFilterValues.favorites) {
+            //todo add favorites filtering
+            return setVisibleData(internalData);
+        }
+
+        const filteredData = data.filter((item: any) => {
+            const dataItemValue = item[filterField];
+            if(isObject(dataItemValue)) {
+                const values = Object.values(dataItemValue);
+                return !!values.filter(val => val === value).length;
+            }
+            if(isArray(dataItemValue)) {
+                return !!dataItemValue.filter(val => val === value).length;
+            }
+            return dataItemValue === value;
+        });
+
+        setVisibleData(filteredData);
     }
 
     const sortChange = (order: SortingStates, field: string) => {
@@ -90,12 +115,15 @@ export default function MarketDataTable(
         } else {
             sortedData = orderBy(internalData, [field], [order]);
         }
-        setInternalData(sortedData);
+        setVisibleData(sortedData);
     }, [sortingState]);
 
 
     return <Container>
-        <TableFilters filtersChange={filtersChange}/>
+        <TableFilters
+            filtersChange={filtersChange}
+            data={filters}
+        />
         <StyledDataTableContainer>
             <div className="table-header">
                 {columns && columns.map((item: Column) => <TableHeader
@@ -110,13 +138,14 @@ export default function MarketDataTable(
                 }
             </div>
             <div className="table-body">
-                {internalData.length && internalData.map((item: any) => <TableRow
+                {visibleData.length > 0 && visibleData.map((item: any) => <TableRow
                     data={item}
                     columns={columns}
                     key={uuidV4()}
                     expandable={expandable}
                     expandableComponent={expandableComponent}
                 />)}
+                {visibleData.length === 0 && <h1>No data for current filter</h1>}
             </div>
 
         </StyledDataTableContainer>

@@ -9,14 +9,18 @@ export enum Currencies {
     'eth',
     'bnb',
     'mana',
-    'vet'
+    'vet',
+    'usdt',
+    'usd'
 }
 
 export enum Markets {
     'Binance',
+    'Coinbase',
+    'KuCoin',
     'Crypto.com',
-    'FTX',
-    'Exodus',
     'Huobi Global',
-    'Coinbase'
+    'FTX',
+    'Kraken',
+    'Exodus'
 }

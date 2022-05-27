@@ -50,8 +50,6 @@ export default function MarketCell(
         value
     } : MarketCellProps
 ) {
-    console.log('market cell width', width);
-
     let icon;
     let acronym = '';
 

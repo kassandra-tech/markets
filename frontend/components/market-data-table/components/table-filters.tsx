@@ -4,6 +4,7 @@ import styled from "styled-components";
 import {FlexColumn, FlexColumnCentered} from "../../styled-wrappers";
 import FilterButtonStyles from "../styled/filter-button.styles";
 import {useState} from "react";
+import {v4 as uuidV4} from "uuid";
 
 const StyledFiltersContainer = styled.div`
     width: 225px;
@@ -25,29 +26,27 @@ const StyledFilters = styled(FlexColumnCentered)`
   padding: 19px 15px;
   `;
 
-
 export interface TableFiltersParams {
     filtersChange: Function;
+    data: TableFilter[];
 }
 
-export default function TableFilters({filtersChange}: TableFiltersParams) {
+export interface TableFilter {
+    name: string;
+    value: any
+}
 
-    const [selectedFilter, setSelectedFilter] = useState<string>('all');
+export enum baseFilterValues {
+    all= 'all',
+    favorites = 'favorites'
+}
 
-    const selectAll = () => {
-        console.log('select all markets');
-        setSelectedFilter('all');
-        filtersChange('all');
-    }
 
-    const selectFavorites = () => {
-        console.log('select favorites');
-        setSelectedFilter('favorites');
-        filtersChange('favorites');
-    }
+export default function TableFilters({filtersChange, data = []}: TableFiltersParams) {
 
-    const selectFilter = (param: string) => {
-        console.log('select filter:', param);
+    const [selectedFilter, setSelectedFilter] = useState<any>('');
+
+    const selectFilter = (param: any) => {
         setSelectedFilter(param);
         filtersChange(param);
     }
@@ -59,33 +58,18 @@ export default function TableFilters({filtersChange}: TableFiltersParams) {
                 <FiltersTitleStyles />
                 <StyledFilters>
                     <FilterButtonStyles
-                        click={selectAll}
-                        selected={selectedFilter === 'all'}
+                        click={() => selectFilter(baseFilterValues.all)}
+                        selected={selectedFilter === baseFilterValues.all}
                     >All markets</FilterButtonStyles>
                     <FilterButtonStyles
-                        click={selectFavorites}
-                        selected={selectedFilter === 'favorites'}
+                        click={() => selectFilter(baseFilterValues.favorites)}
+                        selected={selectedFilter === baseFilterValues.favorites}
                     >Favorites</FilterButtonStyles>
-                    <FilterButtonStyles
-                        click={() => selectFilter('BTC')}
-                        selected={selectedFilter === 'BTC'}
-                    >BTC</FilterButtonStyles>
-                    <FilterButtonStyles
-                        click={() => selectFilter('USD')}
-                        selected={selectedFilter === 'USD'}
-                    >USD</FilterButtonStyles>
-                    <FilterButtonStyles
-                        click={() => selectFilter('USDT')}
-                        selected={selectedFilter === 'USDT'}
-                    >USDT</FilterButtonStyles>
-                    <FilterButtonStyles
-                        click={() => selectFilter('ETH')}
-                        selected={selectedFilter === 'ETH'}
-                    >ETH</FilterButtonStyles>
-                    <FilterButtonStyles
-                        click={() => selectFilter('BNB')}
-                        selected={selectedFilter === 'BNB'}
-                    >BNB</FilterButtonStyles>
+                    {data.map((item: TableFilter) => <FilterButtonStyles
+                        click={() => selectFilter(item.value)}
+                        selected={selectedFilter === item.value}
+                        key={uuidV4()}
+                    >{item.name}</FilterButtonStyles>)}
                 </StyledFilters>
             </StyledFilterBody>
 

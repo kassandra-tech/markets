@@ -1,10 +1,9 @@
 import { RowStyles } from "../styled/row.styles";
-import {ReactNode, useState} from "react";
+import {useState} from "react";
 import {FlexRow} from "../../styled-wrappers";
 import {v4 as uuidV4} from "uuid";
 import {CellStyles} from "../styled/cell.styles";
 import {Column} from "../market-data-table";
-import Indicator from "./indicator";
 
 export interface TableRowProps {
     data: any;
@@ -33,11 +32,13 @@ export default function TableRow(
     return (
         <RowStyles role="button" onClick={rowClick}>
             <FlexRow>
-                {columns.map((item: Column) => item.cell ? item.cell({
-                    width: item.width,
-                    value: data[item.dataField],
-                    dataField: item.dataField
-                }) : <CellStyles
+                {columns.map((item: Column) => item.cell ?
+                    <item.cell
+                        value={data[item.dataField]}
+                        dataField={item.dataField}
+                        width={item.width}
+                        key={uuidV4()}
+                    /> : <CellStyles
                     key={uuidV4()}
                     width={item.width}
                 >

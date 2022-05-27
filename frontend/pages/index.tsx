@@ -118,8 +118,45 @@ const data = [
         indicator: 75,
         volume: 1427814561.55,
         exchanges: ''
+    },
+    {
+        id: 3,
+        market: {
+            name: 'USDT',
+            id: Currencies.usdt
+        },
+        rank: 4,
+        rating: 'CCC',
+        price: [384.44, 382.01],
+        range: [384.60, 321.15],
+        indicator: 75,
+        volume: 1427814561.55,
+        exchanges: ''
     }
-]
+];
+
+const filters = [
+    {
+        name: 'BTC',
+        value: Currencies.btc
+    },
+    {
+        name: 'USD',
+        value: Currencies.usd
+    },
+    {
+        name: 'USDT',
+        value: Currencies.usdt
+    },
+    {
+        name: 'ETH',
+        value: Currencies.eth
+    },
+    {
+        name: 'BNB',
+        value: Currencies.bnb
+    },
+];
 
 const Home: NextPage = () => {
 
@@ -133,8 +170,10 @@ const Home: NextPage = () => {
                 <MarketDataTable
                     columns={columns}
                     data={data}
+                    filters={filters}
                     expandable={true}
                     expandableComponent={ExpandableRow}
+                    filterField="market"
                 />
             </StyledPageContainer>}
         </>
