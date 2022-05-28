@@ -27,56 +27,56 @@ namespace MarketsInterface.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<List<KeyValuePair<string, List<MarketNameModel>>>> Markets()
+        public async Task<List<ExchangeMarketsModel>> Markets()
         {
-            var list = new List<KeyValuePair<string, List<MarketNameModel>>>();
-            KeyValuePair<string, List<MarketNameModel>> item;
+            var list = new List<ExchangeMarketsModel>();
+            ExchangeMarketsModel item;
 
             if (ExchangeBase.IsExchangeActive(Enums.Exchange.Binance))
             {
-                item = new KeyValuePair<string, List<MarketNameModel>>(Enums.Exchange.Binance.ToString(), await Startup.Binance.UpdateMarkets());
+                item = new ExchangeMarketsModel(Enums.Exchange.Binance, await Startup.Binance.UpdateMarkets());
 
                 list.Add(item);
             }
 
             if (ExchangeBase.IsExchangeActive(Enums.Exchange.Coinbase))
             {
-                item = new KeyValuePair<string, List<MarketNameModel>>(Enums.Exchange.Coinbase.ToString(), await Startup.Coinbase.UpdateMarkets());
+                item = new ExchangeMarketsModel(Enums.Exchange.Coinbase, await Startup.Coinbase.UpdateMarkets());
 
                 list.Add(item);
             }
 
             if (ExchangeBase.IsExchangeActive(Enums.Exchange.KuCoin))
             {
-                item = new KeyValuePair<string, List<MarketNameModel>>(Enums.Exchange.KuCoin.ToString(), await Startup.KuCoin.UpdateMarkets());
+                item = new ExchangeMarketsModel(Enums.Exchange.KuCoin, await Startup.KuCoin.UpdateMarkets());
 
                 list.Add(item);
             }
 
             if (ExchangeBase.IsExchangeActive(Enums.Exchange.HuobiGlobal))
             {
-                item = new KeyValuePair<string, List<MarketNameModel>>(Enums.Exchange.HuobiGlobal.ToString(), await Startup.HuobiGlobal.UpdateMarkets());
+                item = new ExchangeMarketsModel(Enums.Exchange.HuobiGlobal, await Startup.HuobiGlobal.UpdateMarkets());
 
                 list.Add(item);
             }
 
             if (ExchangeBase.IsExchangeActive(Enums.Exchange.FTX))
             {
-                item = new KeyValuePair<string, List<MarketNameModel>>(Enums.Exchange.FTX.ToString(), await Startup.Ftx.UpdateMarkets());
+                item = new ExchangeMarketsModel(Enums.Exchange.FTX, await Startup.Ftx.UpdateMarkets());
 
                 list.Add(item);
             }
 
             if (ExchangeBase.IsExchangeActive(Enums.Exchange.Kraken))
             {
-                item = new KeyValuePair<string, List<MarketNameModel>>(Enums.Exchange.Kraken.ToString(), await Startup.Kraken.UpdateMarkets());
+                item = new ExchangeMarketsModel(Enums.Exchange.Kraken, await Startup.Kraken.UpdateMarkets());
 
                 list.Add(item);
             }
 
             if (ExchangeBase.IsExchangeActive(Enums.Exchange.Bittrex))
             {
-                item = new KeyValuePair<string, List<MarketNameModel>>(Enums.Exchange.Bittrex.ToString(), await Startup.Bittrex.UpdateMarkets());
+                item = new ExchangeMarketsModel(Enums.Exchange.Bittrex, await Startup.Bittrex.UpdateMarkets());
 
                 list.Add(item);
             }
