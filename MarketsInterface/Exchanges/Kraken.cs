@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 
-using MarketsInterface.Enums;
 using MarketsInterface.Kassandra;
 
 using Newtonsoft.Json;
@@ -18,17 +17,25 @@ namespace MarketsInterface.Exchanges
     public class Kraken : ExchangeBase
     {
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public Kraken()
+        {
+            _ = UpdateMarkets();
+        }
+
+        /// <summary>
         /// Exchange name reference.
         /// </summary>
-        public override Enums.Exchanges Exchange => Enums.Exchanges.Kraken;
+        public override Enums.Exchange Exchange => Enums.Exchange.Kraken;
 
         /// <summary>
         /// Get available markets.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MarketModel>> GetMarkets()
+        public async Task<List<MarketNameModel>> UpdateMarkets()
         {
-            List<MarketModel> list = new();
+            List<MarketNameModel> list = new();
 
             using (var client = new RestClient(BaseAddress))
             {
@@ -40,12 +47,10 @@ namespace MarketsInterface.Exchanges
                 foreach (var market in products)
                 {
                     var currency = market.Values<string>("base").FirstOrDefault();
-                    var model = new MarketModel
-                    {
-                        Currency = currency,
-                        QuoteCurrency = market.Values<string>("quote").FirstOrDefault(),
-                        CurrencyName = Currencies.ContainsKey(currency) ? Currencies[currency] : string.Empty
-                    };
+                    var model = new MarketNameModel(market.Values<string>("altname").FirstOrDefault(),
+                                                currency,
+                                                market.Values<string>("quote").FirstOrDefault(),
+                                                Currencies.ContainsKey(currency) ? Currencies[currency] : string.Empty);
                     list.Add(model);
                 }
             }

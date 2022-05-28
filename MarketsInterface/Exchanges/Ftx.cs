@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using MarketsInterface.Enums;
 using MarketsInterface.Kassandra;
 
 using Newtonsoft.Json;
@@ -18,26 +17,34 @@ namespace MarketsInterface.Exchanges
     public class Ftx : ExchangeBase
     {
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public Ftx()
+        {
+            _ = UpdateMarkets();
+        }
+
+        /// <summary>
         /// Exchange name reference.
         /// </summary>
-        public override Enums.Exchanges Exchange => Enums.Exchanges.FTX;
+        public override Enums.Exchange Exchange => Enums.Exchange.FTX;
 
         /// <summary>
         /// Get available markets.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MarketModel>> GetMarkets()
+        public async Task<List<MarketNameModel>> UpdateMarkets()
         {
-            return await GetMarkets("baseCurrency", "quoteCurrency", "result");
+            return await UpdateMarkets("name", "baseCurrency", "quoteCurrency", "result");
         }
 
         /// <summary>
         /// Get current prices for supported markets.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<PriceModel>> GetPrices()
+        public async Task<List<MarketModel>> GetPrices()
         {
-            List<PriceModel> list = new();
+            Prices = new();
 
             using (var client = new RestClient(BaseAddress))
             {
@@ -48,17 +55,11 @@ namespace MarketsInterface.Exchanges
 
                 foreach (var market in products)
                 {
-                    var model = new PriceModel
-                    {
-                        Exchange = Exchange,
-                        Market = market["name"].ToString(),
-                        Price = Convert.ToDouble(market["last"])
-                    };
-                    list.Add(model);
+                    Prices.Add(new MarketModel(Markets.Find(x => x.Name == market["name"].ToString()), Convert.ToDouble(market["last"])));
                 }
             }
 
-            return list;
+            return Prices;
         }
 
         internal override string BaseAddress => "https://ftx.us/api";

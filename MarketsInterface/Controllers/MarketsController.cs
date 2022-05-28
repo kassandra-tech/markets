@@ -31,41 +31,41 @@ namespace MarketsInterface.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("markets")]
-        public async Task<List<MarketModel>> Markets(Enums.Exchanges exchange = 0)
+        public async Task<List<MarketNameModel>> Markets(Enums.Exchange exchange = 0)
         {
             switch (exchange)
             {
-                case Enums.Exchanges.Binance:
+                case Enums.Exchange.Binance:
                     {
-                        return await Binance.GetMarkets();
+                        return await Startup.Binance.UpdateMarkets();
                     }
-                case Enums.Exchanges.Coinbase:
+                case Enums.Exchange.Coinbase:
                     {
-                        return await Coinbase.GetMarkets();
+                        return await Startup.Coinbase.UpdateMarkets();
                     }
-                case Enums.Exchanges.KuCoin:
+                case Enums.Exchange.KuCoin:
                     {
-                        return await KuCoin.GetMarkets();
+                        return await Startup.KuCoin.UpdateMarkets();
                     }
-                case Enums.Exchanges.HuobiGlobal:
+                case Enums.Exchange.HuobiGlobal:
                     {
-                        return await HuobiGlobal.GetMarkets();
+                        return await Startup.HuobiGlobal.UpdateMarkets();
                     }
-                case Enums.Exchanges.FTX:
+                case Enums.Exchange.FTX:
                     {
-                        return await Ftx.GetMarkets();
+                        return await Startup.Ftx.UpdateMarkets();
                     }
-                case Enums.Exchanges.Kraken:
+                case Enums.Exchange.Kraken:
                     {
-                        return await Kraken.GetMarkets();
+                        return await Startup.Kraken.UpdateMarkets();
                     }
-                case Enums.Exchanges.Bittrex:
+                case Enums.Exchange.Bittrex:
                     {
-                        return await Bittrex.GetMarkets();
+                        return await Startup.Bittrex.UpdateMarkets();
                     }
                     default:
                     {
-                        return new List<MarketModel>();
+                        return new List<MarketNameModel>();
                     }
             }
         }
@@ -78,191 +78,27 @@ namespace MarketsInterface.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("price")]
-        public async Task<List<PriceModel>> Price(Enums.Exchanges exchange)
+        public async Task<List<MarketModel>> Price(Enums.Exchange exchange)
         {
             switch (exchange)
             {
-                case Enums.Exchanges.Binance:
+                case Enums.Exchange.Binance:
                     {
-                        return await Binance.GetPrices();
+                        return await Startup.Binance.GetPrices();
                     }
-                case Enums.Exchanges.FTX:
+                case Enums.Exchange.FTX:
                     {
-                        return await Ftx.GetPrices();
+                        return await Startup.Ftx.GetPrices();
                     }
-                case Enums.Exchanges.Bittrex:
+                case Enums.Exchange.Bittrex:
                     {
-                        return await Bittrex.GetPrices();
-                    }
-                default:
-                    {
-                        return new List<PriceModel>();
-                    }
-            }
-        }
-
-        /// <summary>
-        /// Get the market price range for the given timeframe.
-        /// NOTE: This is not accurate price range data. Random values are generated based on the current price for testing purposes.
-        /// </summary>
-        /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
-        /// <param name="startTime">First day in the date range.</param>
-        /// <param name="endTime">Last Day in the date range.</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("price-range")]
-        public async Task<List<PriceRangeModel>> PriceRange(Enums.Exchanges exchange, DateTime startTime, DateTime endTime)
-        {
-            var priceRanges = new List<PriceRangeModel>();
-            List<PriceModel> prices;
-
-            switch (exchange)
-            {
-                case Enums.Exchanges.Binance:
-                    {
-                        prices = await Binance.GetPrices();
-                        break;
-                    }
-                case Enums.Exchanges.FTX:
-                    {
-                        prices = await Ftx.GetPrices();
-                        break;
-                    }
-                case Enums.Exchanges.Bittrex:
-                    {
-                        prices = await Bittrex.GetPrices();
-                        break;
+                        return await Startup.Bittrex.GetPrices();
                     }
                 default:
                     {
-                        return new List<PriceRangeModel>();
+                        return new List<MarketModel>();
                     }
             }
-
-            foreach (var price in prices)
-            {
-                var random = new Random();
-
-                var model = new PriceRangeModel(exchange)
-                {
-                    Market = price.Market,
-                    StartTime = startTime,
-                    EndTime = endTime,
-                    Price = price.Price,
-                    LowPrice = random.NextDouble() * (price.Price - price.Price * 0.8) + price.Price * 0.8,
-                    HighPrice = random.NextDouble() * (price.Price * 1.2 - price.Price) + price.Price
-                };
-
-                priceRanges.Add(model);
-            }
-
-            return priceRanges;
-        }
-
-        /// <summary>
-        /// Get the volume for a given market.
-        /// If an exchange is passed the volume for the given exchange will be returned.
-        /// NOTE: This is not returning volume data at this time.
-        /// </summary>
-        /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
-        /// <param name="startTime">First day in the date range.</param>
-        /// <param name="endTime">Last Day in the date range.</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("volume")]
-        public async Task<List<PriceVolumeModel>> Volume(Enums.Exchanges exchange, DateTime startTime, DateTime endTime)
-        {
-            List<PriceModel> prices;
-            var volumes = new List<PriceVolumeModel>();
-
-            switch (exchange)
-            {
-                case Enums.Exchanges.Binance:
-                    {
-                        prices = await Binance.GetPrices();
-                        break;
-                    }
-                case Enums.Exchanges.FTX:
-                    {
-                        prices = await Ftx.GetPrices();
-                        break;
-                    }
-                case Enums.Exchanges.Bittrex:
-                    {
-                        prices = await Bittrex.GetPrices();
-                        break;
-                    }
-                default:
-                    {
-                        return new List<PriceVolumeModel>();
-                    }
-            }
-
-            foreach (var price in prices)
-            {
-                var random = new Random();
-
-                var model = new PriceVolumeModel(exchange)
-                {
-                    Market = price.Market,
-                    StartTime = startTime,
-                    EndTime = endTime,
-                    Volume = random.NextDouble() * price.Price * 10000
-                };
-
-                volumes.Add(model);
-            }
-
-            return volumes;
-        }
-
-        /// <summary>
-        /// Determine the current market price value compared to the given date range.
-        /// NOTE: This is not returning price indicator data at this time.
-        /// </summary>
-        /// <param name="market">Market to retrieve data from.</param>
-        /// <param name="startTime">First day in the date range.</param>
-        /// <param name="endTime">Last Day in the date range.</param>
-        /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("price-indicator")]
-        public PriceIndicatorModel PriceIndicator(string market, DateTime startTime, DateTime endTime, Enums.Exchanges exchange = 0)
-        {
-            return new PriceIndicatorModel(market, startTime, endTime, exchange);
-        }
-
-        /// <summary>
-        /// Get the rank of the given market.
-        /// NOTE: This is returning random rank data at this time.
-        /// </summary>
-        /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
-        /// <param name="currency">Currency to get the rank of.</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("rank")]
-        public int Rank(Enums.Exchanges exchange, string currency)
-        {
-            var random = new Random();
-
-            return random.Next(1, 10000);
-        }
-
-        /// <summary>
-        /// Get the rating of the given currency.
-        /// NOTE: This is returning random rating data at this time.
-        /// </summary>
-        /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
-        /// <param name="currency">Currency to get the rating of.</param>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("rating")]
-        public string Rating(Enums.Exchanges exchange, string currency)
-        {
-            var random = new Random();
-            var ratings = new List<string> { "A", "B", "C", "D", "E", "F" };
-
-            return ratings[random.Next(ratings.Count)];
         }
 
         /// <summary>
@@ -271,17 +107,9 @@ namespace MarketsInterface.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("exchanges")]
-        public ConcurrentDictionary<string, List<Enums.Exchanges>> MarketExchanges()
+        public ConcurrentDictionary<string, List<Enums.Exchange>> MarketExchanges()
         {
             return ExchangeBase.MarketExchanges;
         }
-
-        private Binance Binance = new Binance();
-        private Coinbase Coinbase = new Coinbase();
-        private KuCoin KuCoin = new KuCoin();
-        private HuobiGlobal HuobiGlobal = new HuobiGlobal();
-        private Ftx Ftx = new Ftx();
-        private Kraken Kraken = new Kraken();
-        private Bittrex Bittrex = new Bittrex();
     }
 }

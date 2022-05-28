@@ -3,7 +3,7 @@
     /// <summary>
     /// Supported exchanges.
     /// </summary>
-    public enum Exchanges
+    public enum Exchange
     {
         /// <summary>
         /// Binance

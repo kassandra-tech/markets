@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using MarketsInterface.Enums;
 using MarketsInterface.Kassandra;
 
 namespace MarketsInterface.Exchanges
@@ -17,12 +16,13 @@ namespace MarketsInterface.Exchanges
         public KuCoin()
         {
             UpdateCurrencies();
+            _ = UpdateMarkets();
         }
 
         /// <summary>
         /// Exchange name reference.
         /// </summary>
-        public override Enums.Exchanges Exchange => Enums.Exchanges.KuCoin;
+        public override Enums.Exchange Exchange => Enums.Exchange.KuCoin;
 
         /// <summary>
         /// Update currency information.
@@ -36,9 +36,9 @@ namespace MarketsInterface.Exchanges
         /// Get available markets.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MarketModel>> GetMarkets()
+        public async Task<List<MarketNameModel>> UpdateMarkets()
         {
-            return await GetMarkets("baseCurrency", "quoteCurrency", "data");
+            return await UpdateMarkets("symbol", "baseCurrency", "quoteCurrency", "data");
         }
 
         internal override string BaseAddress => "https://api.kucoin.com";

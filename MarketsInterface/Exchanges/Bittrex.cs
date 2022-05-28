@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using MarketsInterface.Enums;
 using MarketsInterface.Kassandra;
 
 namespace MarketsInterface.Exchanges
@@ -12,24 +11,32 @@ namespace MarketsInterface.Exchanges
     public class Bittrex : ExchangeBase
     {
         /// <summary>
+        /// Constructor.
+        /// </summary>
+        public Bittrex()
+        {
+            _ = UpdateMarkets();
+        }
+
+        /// <summary>
         /// Exchange name reference.
         /// </summary>
-        public override Enums.Exchanges Exchange => Enums.Exchanges.Bittrex;
+        public override Enums.Exchange Exchange => Enums.Exchange.Bittrex;
 
         /// <summary>
         /// Get available markets.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MarketModel>> GetMarkets()
+        public async Task<List<MarketNameModel>> UpdateMarkets()
         {
-            return await GetMarkets("baseCurrencySymbol", "quoteCurrencySymbol");
+            return await UpdateMarkets("symbol", "baseCurrencySymbol", "quoteCurrencySymbol");
         }
 
         /// <summary>
         /// Get current prices for supported markets.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<PriceModel>> GetPrices()
+        public async Task<List<MarketModel>> GetPrices()
         {
             return await GetPrices("symbol", "lastTradeRate");
         }

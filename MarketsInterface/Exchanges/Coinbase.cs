@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-using MarketsInterface.Enums;
 using MarketsInterface.Kassandra;
 
 namespace MarketsInterface.Exchanges
@@ -16,13 +15,14 @@ namespace MarketsInterface.Exchanges
         /// </summary>
         public Coinbase()
         {
+            _ = UpdateMarkets();
             UpdateCurrencies();
         }
 
         /// <summary>
         /// Exchange name reference.
         /// </summary>
-        public override Enums.Exchanges Exchange => Enums.Exchanges.Coinbase;
+        public override Enums.Exchange Exchange => Enums.Exchange.Coinbase;
         
         /// <summary>
         /// Update currency information.
@@ -36,9 +36,9 @@ namespace MarketsInterface.Exchanges
         /// Get available markets.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MarketModel>> GetMarkets()
+        public async Task<List<MarketNameModel>> UpdateMarkets()
         {
-            return await GetMarkets("base_currency", "quote_currency");
+            return await UpdateMarkets("id", "base_currency", "quote_currency");
         }
 
         internal override string BaseAddress => "https://api.exchange.coinbase.com";

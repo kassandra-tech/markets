@@ -1,6 +1,8 @@
 using System;
 using System.IO;
 
+using MarketsInterface.Exchanges;
+
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -23,7 +25,15 @@ namespace MarketsInterface
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
-        }
+
+            Binance = new();
+            Coinbase = new();
+            KuCoin = new();
+            HuobiGlobal = new();
+            Ftx = new();
+            Kraken = new();
+            Bittrex = new();
+    }
 
         /// <summary>
         /// Configuration.
@@ -71,5 +81,13 @@ namespace MarketsInterface
                 endpoints.MapControllers();
             });
         }
+
+        internal static Binance Binance { get; private set; }
+        internal static Coinbase Coinbase { get; private set; }
+        internal static KuCoin KuCoin { get; private set; }
+        internal static HuobiGlobal HuobiGlobal { get; private set; }
+        internal static Ftx Ftx { get; private set; }
+        internal static Kraken Kraken { get; private set; }
+        internal static Bittrex Bittrex { get; private set; }
     }
 }
