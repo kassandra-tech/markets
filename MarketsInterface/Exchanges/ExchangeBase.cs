@@ -31,6 +31,31 @@ namespace MarketsInterface.Exchanges
         public abstract Enums.Exchange Exchange { get; }
 
         /// <summary>
+        /// BTC
+        /// </summary>
+        public const string BtcSymbol = "BTC";
+
+        /// <summary>
+        /// USD
+        /// </summary>
+        public const string UsdSymbol = "USD";
+
+        /// <summary>
+        /// USDT
+        /// </summary>
+        public const string UsdtSymbol = "USDT";
+
+        /// <summary>
+        /// ETH
+        /// </summary>
+        public const string EthSymbol = "ETH";
+
+        /// <summary>
+        /// BNB
+        /// </summary>
+        public const string BnbSymbol = "BNB";
+
+        /// <summary>
         /// Update currency information.
         /// </summary>
         /// <param name="symbol">Currency Symbol.</param>
@@ -126,6 +151,45 @@ namespace MarketsInterface.Exchanges
             return MarketData;
         }
 
+        /// <summary>
+        ///Market data filtered by MarketFilter selection.
+        ///NOTE: Favorites is not implemented.
+        /// </summary>
+        /// <param name="data">List of all MarketModel data matching the filter criteria.</param>
+        /// <returns></returns>
+        internal List<MarketModel> FilterMarketData(List<MarketModel> data)
+        {
+            // The All case returns the raw data.
+            if (ActiveMarketFilter == Enums.MarketFilters.Favorites)
+            {
+                // TODO: Return favorites list.
+            }
+            else if (ActiveMarketFilter == Enums.MarketFilters.BTC)
+            {
+                data = data.FindAll(x => x.QuoteCurrency == BtcSymbol);
+            }
+            else if (ActiveMarketFilter == Enums.MarketFilters.USD)
+            {
+                data = data.FindAll(x => x.QuoteCurrency == UsdSymbol);
+            }
+            else if (ActiveMarketFilter == Enums.MarketFilters.USDT)
+            {
+                data = data.FindAll(x => x.QuoteCurrency == UsdtSymbol);
+            }
+            else if (ActiveMarketFilter == Enums.MarketFilters.ETH)
+            {
+                data = data.FindAll(x => x.QuoteCurrency == EthSymbol);
+            }
+            else if (ActiveMarketFilter == Enums.MarketFilters.BNB)
+            {
+                data = data.FindAll(x => x.QuoteCurrency == BnbSymbol);
+            }
+
+            return data;
+        }
+
+        internal static bool IsExchangeActive(Enums.Exchange exchange) => ActiveExchanges.Contains(exchange) || ActiveExchanges.Count == 0;
+
         internal abstract string BaseAddress { get; }
         internal abstract string CurrencyInformation { get; }
         internal abstract string MarketInformation { get; }
@@ -133,7 +197,9 @@ namespace MarketsInterface.Exchanges
 
         internal static ConcurrentDictionary<string, string> Currencies = new();
         internal static ConcurrentDictionary<string, List<string>> MarketExchanges = new();
-        
+        internal static List<Enums.Exchange> ActiveExchanges = new();
+        internal static Enums.MarketFilters ActiveMarketFilter { get; set; }
+
         internal List<MarketModel> MarketData { get; set; }
         internal List<MarketNameModel> Markets { get; set; }
     }
