@@ -23,6 +23,7 @@ namespace MarketsInterface.Kassandra
         /// <param name="label">Trade indicator based on the current price, low, and high prices for the time range.</param>
         /// <param name="rank">Rank based on currency market capitalization.</param>
         /// <param name="rating">Rating for the currency.</param>
+        /// <param name="exchanges">Exchanges that trade this market.</param>
         public MarketModel(MarketNameModel marketModel,
                           double price,
                           double quotePrice = 0,
@@ -32,7 +33,8 @@ namespace MarketsInterface.Kassandra
                           double percentage = 0,
                           string label = "",
                           int rank = 0,
-                          string rating = "")
+                          string rating = "",
+                          List<string> exchanges = null)
         {
             MarketInformation = marketModel;
             Price = price;
@@ -44,6 +46,7 @@ namespace MarketsInterface.Kassandra
             Label = label;
             Rank = rank;
             Rating = rating;
+            Exchanges = exchanges != null ? exchanges : new List<string>();
 
             // TODO: Temporary for testing.
             if (QuotePrice == 0 && LowPrice == 0 && HighPrice == 0 && Volume == 0 && Percentage == 0 && Label == string.Empty && Rank == 0 && Rating == string.Empty)
@@ -118,6 +121,11 @@ namespace MarketsInterface.Kassandra
         /// Currency rating.
         /// </summary>
         public string Rating { get; set; }
+
+        /// <summary>
+        /// Exchanges that trade this market.
+        /// </summary>
+        public List<string> Exchanges { get; set; }
 
         private MarketNameModel MarketInformation { get; }
 

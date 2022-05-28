@@ -29,16 +29,16 @@ namespace MarketsInterface.Exchanges
         /// <returns></returns>
         public async Task<List<MarketNameModel>> UpdateMarkets()
         {
-            return await UpdateMarkets("symbol", "baseCurrencySymbol", "quoteCurrencySymbol");
+            return await UpdateMarketInformation("symbol", "baseCurrencySymbol", "quoteCurrencySymbol");
         }
 
         /// <summary>
         /// Get current prices for supported markets.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MarketModel>> GetPrices()
+        public async Task<List<MarketModel>> UpdateMarketData()
         {
-            return await GetPrices("symbol", "lastTradeRate");
+            return await UpdateMarketData("symbol", "lastTradeRate");
         }
 
         internal override string BaseAddress => "https://api.bittrex.com/v3";

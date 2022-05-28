@@ -35,16 +35,16 @@ namespace MarketsInterface.Exchanges
         /// <returns></returns>
         public async Task<List<MarketNameModel>> UpdateMarkets()
         {
-            return await UpdateMarkets("name", "baseCurrency", "quoteCurrency", "result");
+            return await UpdateMarketInformation("name", "baseCurrency", "quoteCurrency", "result");
         }
 
         /// <summary>
         /// Get current prices for supported markets.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MarketModel>> GetPrices()
+        public async Task<List<MarketModel>> UpdateMarketData()
         {
-            Prices = new();
+            MarketData = new();
 
             using (var client = new RestClient(BaseAddress))
             {
@@ -55,11 +55,11 @@ namespace MarketsInterface.Exchanges
 
                 foreach (var market in products)
                 {
-                    Prices.Add(new MarketModel(Markets.Find(x => x.Name == market["name"].ToString()), Convert.ToDouble(market["last"])));
+                    MarketData.Add(new MarketModel(Markets.Find(x => x.Name == market["name"].ToString()), Convert.ToDouble(market["last"])));
                 }
             }
 
-            return Prices;
+            return MarketData;
         }
 
         internal override string BaseAddress => "https://ftx.us/api";

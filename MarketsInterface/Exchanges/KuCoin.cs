@@ -38,7 +38,7 @@ namespace MarketsInterface.Exchanges
         /// <returns></returns>
         public async Task<List<MarketNameModel>> UpdateMarkets()
         {
-            return await UpdateMarkets("symbol", "baseCurrency", "quoteCurrency", "data");
+            return await UpdateMarketInformation("symbol", "baseCurrency", "quoteCurrency", "data");
         }
 
         internal override string BaseAddress => "https://api.kucoin.com";

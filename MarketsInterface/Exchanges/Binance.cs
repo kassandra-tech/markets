@@ -29,16 +29,16 @@ namespace MarketsInterface.Exchanges
         /// <returns></returns>
         public async Task<List<MarketNameModel>> UpdateMarkets()
         {
-            return await UpdateMarkets("symbol", "baseAsset", "quoteAsset", "symbols");
+            return await UpdateMarketInformation("symbol", "baseAsset", "quoteAsset", "symbols");
         }
 
         /// <summary>
         /// Get current prices for supported markets.
         /// </summary>
         /// <returns></returns>
-        public async Task<List<MarketModel>> GetPrices()
+        public async Task<List<MarketModel>> UpdateMarketData()
         {
-            return await GetPrices("symbol", "price");
+            return await UpdateMarketData("symbol", "price");
         }
 
         internal override string BaseAddress => "https://api.binance.com/api/v3";

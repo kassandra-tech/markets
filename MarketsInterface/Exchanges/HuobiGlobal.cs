@@ -38,7 +38,7 @@ namespace MarketsInterface.Exchanges
         /// <returns></returns>
         public async Task<List<MarketNameModel>> UpdateMarkets()
         {
-            return await UpdateMarkets("sc", "bcdn", "qcdn", "data");
+            return await UpdateMarketInformation("sc", "bcdn", "qcdn", "data");
         }
 
         internal override string BaseAddress => "https://api.huobi.pro";

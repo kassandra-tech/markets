@@ -1,4 +1,6 @@
-﻿namespace MarketsInterface.Kassandra
+﻿using System.Collections.Generic;
+
+namespace MarketsInterface.Kassandra
 {
     /// <summary>
     /// Data for viewing exchange information by member selection.
@@ -9,28 +11,21 @@
         /// Constructor.
         /// </summary>
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
-        /// <param name="connected">Does the member have an account connected for the exchange?</param>
-        /// <param name="enabled">Has the member decided to view the current excahnge?</param>
-        public ExchangeModel(Enums.Exchange exchange, bool connected, bool enabled)
+        /// <param name="marketData">All market data for the exchange.</param>
+        public ExchangeModel(Enums.Exchange exchange, List<MarketModel> marketData)
         {
-            Exchange = exchange;
-            Connected = connected;
-            Enabled = enabled;
+            Exchange = exchange.ToString();
+            Data = marketData;
         }
 
         /// <summary>
         /// Exchange from supported exchange list to retrieve data from.
         /// </summary>
-        public Enums.Exchange Exchange { get; }
+        public string Exchange { get; }
 
         /// <summary>
-        /// Does the member have an account connected for the exchange?
+        /// All market data for the exchange.
         /// </summary>
-        public bool Connected { get; }
-
-        /// <summary>
-        /// Has the member decided to view the current excahnge?
-        /// </summary>
-        public bool Enabled { get; }
+        public List<MarketModel> Data { get; }
     }
 }

@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
+﻿using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
@@ -14,7 +13,7 @@ namespace MarketsInterface.Controllers
     /// APIs to support Kassandra markets.
     /// </summary>
     [ApiController]
-    [Route("market")]
+    [Route("markets")]
     public class MarketController : ControllerBase
     {
         /// <summary>
@@ -30,7 +29,6 @@ namespace MarketsInterface.Controllers
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("markets")]
         public async Task<List<MarketNameModel>> Markets(Enums.Exchange exchange = 0)
         {
             switch (exchange)
@@ -71,28 +69,28 @@ namespace MarketsInterface.Controllers
         }
 
         /// <summary>
-        /// Get market price for the given market on the selected exchange.
-        /// NOTE: This is not returning price data at this time.
+        /// Get market data for all markets on the exchange.
+        /// NOTE: Only Binance, FTX, and Bittrex are returning market data at this time.
         /// </summary>
         /// <param name="exchange">Exchange from supported exchange list to retrieve data from.</param>
         /// <returns></returns>
         [HttpGet]
-        [Route("price")]
-        public async Task<List<MarketModel>> Price(Enums.Exchange exchange)
+        [Route("data")]
+        public async Task<List<MarketModel>> UpdateMarketData(Enums.Exchange exchange)
         {
             switch (exchange)
             {
                 case Enums.Exchange.Binance:
                     {
-                        return await Startup.Binance.GetPrices();
+                        return await Startup.Binance.UpdateMarketData();
                     }
                 case Enums.Exchange.FTX:
                     {
-                        return await Startup.Ftx.GetPrices();
+                        return await Startup.Ftx.UpdateMarketData();
                     }
                 case Enums.Exchange.Bittrex:
                     {
-                        return await Startup.Bittrex.GetPrices();
+                        return await Startup.Bittrex.UpdateMarketData();
                     }
                 default:
                     {
@@ -102,12 +100,35 @@ namespace MarketsInterface.Controllers
         }
 
         /// <summary>
+        /// Get market data for all markets on all exchanges.
+        /// NOTE: Market data is from Binance, FTX, and Bittrex at this time.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("data/all")]
+        public List<ExchangeModel> UpdateAllMarketData()
+        {
+            var exchangeData = new List<ExchangeModel>();
+
+            var exchange = new ExchangeModel(Enums.Exchange.Binance, Startup.Binance.UpdateMarketData().Result);
+            exchangeData.Add(exchange);
+
+            exchange = new ExchangeModel(Enums.Exchange.FTX, Startup.Ftx.UpdateMarketData().Result);
+            exchangeData.Add(exchange);
+
+            exchange = new ExchangeModel(Enums.Exchange.Bittrex, Startup.Bittrex.UpdateMarketData().Result);
+            exchangeData.Add(exchange);
+
+            return exchangeData;
+        }
+
+        /// <summary>
         /// Get Exchanges associated with Markets.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
         [Route("exchanges")]
-        public ConcurrentDictionary<string, List<Enums.Exchange>> MarketExchanges()
+        public ConcurrentDictionary<string, List<string>> MarketExchanges()
         {
             return ExchangeBase.MarketExchanges;
         }

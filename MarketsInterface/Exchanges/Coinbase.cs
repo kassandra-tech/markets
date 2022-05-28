@@ -38,7 +38,7 @@ namespace MarketsInterface.Exchanges
         /// <returns></returns>
         public async Task<List<MarketNameModel>> UpdateMarkets()
         {
-            return await UpdateMarkets("id", "base_currency", "quote_currency");
+            return await UpdateMarketInformation("id", "base_currency", "quote_currency");
         }
 
         internal override string BaseAddress => "https://api.exchange.coinbase.com";

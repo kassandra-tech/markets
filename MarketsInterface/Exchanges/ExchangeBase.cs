@@ -17,7 +17,9 @@ namespace MarketsInterface.Exchanges
     /// </summary>
     public abstract class ExchangeBase
     {
-
+        /// <summary>
+        /// Constructor.
+        /// </summary>
         public ExchangeBase()
         {
             Markets = new List<MarketNameModel>();
@@ -58,12 +60,12 @@ namespace MarketsInterface.Exchanges
         /// <summary>
         /// Get market information.
         /// </summary>
-        /// <param name="market"></param>
-        /// <param name="baseCurrencyString">Base currency in the market.</param>
-        /// <param name="quoteCurrencyString">Quote currency in the market.</param>
-        /// <param name="baseNode">Base node of info in the response structure.</param>
+        /// <param name="marketString">Market attribute name in the response.</param>
+        /// <param name="baseCurrencyString">Base currency attribute in the response.</param>
+        /// <param name="quoteCurrencyString">Quote currency attribute in the response.</param>
+        /// <param name="baseNode">Base node of info in the response.</param>
         /// <returns></returns>
-        public async Task<List<MarketNameModel>> UpdateMarkets(string market, string baseCurrencyString, string quoteCurrencyString, string baseNode = "")
+        public async Task<List<MarketNameModel>> UpdateMarketInformation(string marketString, string baseCurrencyString, string quoteCurrencyString, string baseNode = "")
         {
             Markets = new();
 
@@ -74,21 +76,21 @@ namespace MarketsInterface.Exchanges
                 var info = await client.GetAsync(request);
                 var products = string.IsNullOrEmpty(baseNode) ? JsonConvert.DeserializeObject<JArray>(info.Content) : JsonConvert.DeserializeObject<JObject>(info.Content)[baseNode];
 
-                foreach (var marketString in products)
+                foreach (var market in products)
                 {
-                    var currency = marketString[baseCurrencyString].ToString();
-                    var model = new MarketNameModel(marketString[market].ToString(), currency, marketString[quoteCurrencyString].ToString(), Currencies.ContainsKey(currency) ? Currencies[currency] : string.Empty);
+                    var currency = market[baseCurrencyString].ToString();
+                    var model = new MarketNameModel(market[marketString].ToString(), currency, market[quoteCurrencyString].ToString(), Currencies.ContainsKey(currency) ? Currencies[currency] : string.Empty);
                     Markets.Add(model);
 
                     if (!MarketExchanges.ContainsKey(model.Market))
                     {
-                        var tempList = new List<Enums.Exchange>();
-                        tempList.Add(Exchange);
+                        var tempList = new List<string>();
+                        tempList.Add(Exchange.ToString());
                         MarketExchanges.TryAdd(model.Market, tempList);
                     }
-                    else if (!MarketExchanges[model.Market].Contains(Exchange))
+                    else if (!MarketExchanges[model.Market].Contains(Exchange.ToString()))
                     {
-                        MarketExchanges[model.Market].Add(Exchange);
+                        MarketExchanges[model.Market].Add(Exchange.ToString());
                     }
                 }
             }
@@ -103,9 +105,9 @@ namespace MarketsInterface.Exchanges
         /// <param name="priceString">Price string reference.</param>
         /// <param name="baseNode">Base node of info in the response structure.</param>
         /// <returns></returns>
-        public async Task<List<MarketModel>> GetPrices(string marketString, string priceString, string baseNode = "")
+        public async Task<List<MarketModel>> UpdateMarketData(string marketString, string priceString, string baseNode = "")
         {
-            Prices = new();
+            MarketData = new();
 
             using (var client = new RestClient(BaseAddress))
             {
@@ -116,11 +118,12 @@ namespace MarketsInterface.Exchanges
 
                 foreach (var market in products)
                 {
-                    Prices.Add(new MarketModel(Markets.Find(x => x.Name == market[marketString].ToString()), Convert.ToDouble(market[priceString])));
+                    var model = Markets.Find(x => x.Name == market[marketString].ToString());
+                    MarketData.Add(new MarketModel(model, Convert.ToDouble(market[priceString]), exchanges: MarketExchanges[model.Market]));
                 }
             }
 
-            return Prices;
+            return MarketData;
         }
 
         internal abstract string BaseAddress { get; }
@@ -129,9 +132,9 @@ namespace MarketsInterface.Exchanges
         internal abstract string PriceInformation { get; }
 
         internal static ConcurrentDictionary<string, string> Currencies = new();
-        internal static ConcurrentDictionary<string, List<Enums.Exchange>> MarketExchanges = new();
+        internal static ConcurrentDictionary<string, List<string>> MarketExchanges = new();
         
-        internal List<MarketModel> Prices { get; set; }
+        internal List<MarketModel> MarketData { get; set; }
         internal List<MarketNameModel> Markets { get; set; }
     }
 }
