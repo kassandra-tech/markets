@@ -23,6 +23,11 @@ namespace MarketsInterface.Exchanges
         public ExchangeBase()
         {
             Markets = new List<MarketNameModel>();
+
+            if (FavoriteMarkets == null)
+            {
+                FavoriteMarkets = new List<string>();
+            }
         }
 
         /// <summary>
@@ -153,7 +158,6 @@ namespace MarketsInterface.Exchanges
 
         /// <summary>
         ///Market data filtered by MarketFilter selection.
-        ///NOTE: Favorites is not implemented.
         /// </summary>
         /// <param name="data">List of all MarketModel data matching the filter criteria.</param>
         /// <returns></returns>
@@ -162,7 +166,7 @@ namespace MarketsInterface.Exchanges
             // The All case returns the raw data.
             if (ActiveMarketFilter == Enums.MarketFilters.Favorites)
             {
-                // TODO: Return favorites list.
+                data = data.FindAll(x => FavoriteMarkets.Contains(x.Market));
             }
             else if (ActiveMarketFilter == Enums.MarketFilters.BTC)
             {
@@ -199,6 +203,7 @@ namespace MarketsInterface.Exchanges
         internal static ConcurrentDictionary<string, List<string>> MarketExchanges = new();
         internal static List<Enums.Exchange> ActiveExchanges = new();
         internal static Enums.MarketFilters ActiveMarketFilter { get; set; }
+        internal static List<string> FavoriteMarkets { get; set; }
 
         internal List<MarketModel> MarketData { get; set; }
         internal List<MarketNameModel> Markets { get; set; }

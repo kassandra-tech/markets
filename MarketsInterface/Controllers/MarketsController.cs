@@ -121,6 +121,17 @@ namespace MarketsInterface.Controllers
         }
 
         /// <summary>
+        /// Markets in view.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("market-filter")]
+        public Enums.MarketFilters GetMarketDataFilter()
+        {
+            return ExchangeBase.ActiveMarketFilter;
+        }
+
+        /// <summary>
         /// Update Markets in view.
         /// </summary>
         /// <returns></returns>
@@ -134,16 +145,61 @@ namespace MarketsInterface.Controllers
         }
 
         /// <summary>
+        /// Exchanges in view.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("exchange-filter")]
+        public List<Enums.Exchange> ActiveExchanges()
+        {
+            return ExchangeBase.ActiveExchanges;
+        }
+
+        /// <summary>
         /// Update Exchanges in view.
         /// </summary>
+        /// <param name="exchanges">Exchanges to view data for.</param>
         /// <returns></returns>
         [HttpPost]
         [Route("update/exchange-filter")]
-        public List<Enums.Exchange> UpdateFilteredExchanges(List<Enums.Exchange> exchanges)
+        public List<Enums.Exchange> UpdateActiveExchanges(List<Enums.Exchange> exchanges)
         {
             ExchangeBase.ActiveExchanges = exchanges;
 
             return ExchangeBase.ActiveExchanges;
+        }
+
+        /// <summary>
+        /// Favorite Market favorites list.
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("favorite-market")]
+        public List<string> FavoriteMarkets()
+        {
+            return ExchangeBase.FavoriteMarkets;
+        }
+
+        /// <summary>
+        /// Update favorite markets list.
+        /// </summary>
+        /// <param name="market">Market to add or remove from the list. Format is 'ETH-BTC'</param>
+        /// <param name="addMarket">When true the market will be added to the favorites list. False it will be removed from the list.</param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("update/favorite-market")]
+        public List<string> UpdateFavoriteMarkets(string market, bool addMarket = true)
+        {
+            if (!ExchangeBase.FavoriteMarkets.Contains(market) && addMarket)
+            {
+                ExchangeBase.FavoriteMarkets.Add(market);
+            }
+            else if (ExchangeBase.FavoriteMarkets.Contains(market) && !addMarket)
+            {
+                ExchangeBase.FavoriteMarkets.Remove(market);
+            }
+
+            return ExchangeBase.FavoriteMarkets;
         }
 
         /// <summary>
