@@ -23,7 +23,7 @@ namespace MarketsInterface.Controllers
         }
 
         /// <summary>
-        /// Available markets for the given exchange based on the current exchange filter.
+        /// Available markets based on the Market, Exchange, and Favorite filters. 
         /// </summary>
         /// <returns></returns>
         [HttpGet]

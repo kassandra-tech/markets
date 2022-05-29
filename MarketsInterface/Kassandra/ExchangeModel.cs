@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace MarketsInterface.Kassandra
 {
@@ -16,6 +17,7 @@ namespace MarketsInterface.Kassandra
         {
             Exchange = exchange.ToString();
             Data = marketData;
+            Time = DateTime.Now.ToString("yyyy-MM-dd hh:mm:ss:ff");
         }
 
         /// <summary>
@@ -27,5 +29,10 @@ namespace MarketsInterface.Kassandra
         /// All market data for the exchange.
         /// </summary>
         public List<MarketModel> Data { get; }
+
+        /// <summary>
+        /// Request time.
+        /// </summary>
+        public string Time { get; }
     }
 }
