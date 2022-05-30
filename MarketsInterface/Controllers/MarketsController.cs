@@ -27,6 +27,7 @@ namespace MarketsInterface.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
+        [Route("currencies")]
         public ICollection<string> Currencies()
         {
             return ExchangeBase.Currencies.Keys;
@@ -37,8 +38,8 @@ namespace MarketsInterface.Controllers
         /// </summary>
         /// <param name="exchangeFilter">Exchanges to get data from. See <see cref="Enums.Exchange"/> for available options ex: 1,2,3,4</param>
         /// <returns></returns>
-        [HttpPost]
-        public async Task<List<ExchangeMarketsModel>> Markets(List<Enums.Exchange> exchangeFilter)
+        [HttpGet]
+        public async Task<List<ExchangeMarketsModel>> Markets(string exchangeFilter)
         {
             var list = new List<ExchangeMarketsModel>();
             ExchangeMarketsModel item;
@@ -102,9 +103,9 @@ namespace MarketsInterface.Controllers
         /// <param name="marketsFilter">Markets to return data for.</param>
         /// <param name="exchangesFilter">Exchanges to get data from. See <see cref="Enums.Exchange"/> for available options ex: 1,2,3,4</param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [Route("data")]
-        public List<ExchangeModel> MarketData(Enums.MarketFilters marketsFilter, List<Enums.Exchange> exchangesFilter)
+        public List<ExchangeModel> MarketData(Enums.MarketFilters marketsFilter, string exchangesFilter)
         {
             var exchangeData = new List<ExchangeModel>();
             List<MarketModel> data;
@@ -139,25 +140,27 @@ namespace MarketsInterface.Controllers
         /// <summary>
         /// Market data for all favorite markets.
         /// </summary>
-        /// <param name="favoriteMarkets">List of favorite markets. ex: "BTC-USD", "ETH-BTC"</param>
+        /// <param name="favoriteMarkets">List of favorite markets. ex: BTC-USD,ETH-BTC</param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpGet]
         [Route("favorites")]
-        public List<ExchangeModel> MarketData(List<string> favoriteMarkets)
+        public List<ExchangeModel> MarketData(string favoriteMarkets)
         {
             var exchangeData = new List<ExchangeModel>();
             List<MarketModel> data;
             ExchangeModel exchange;
 
-            data = Startup.Binance.FavoriteMarketData(Startup.Binance.UpdateMarketData().Result, favoriteMarkets);
+            var favoritesList = !string.IsNullOrWhiteSpace(favoriteMarkets) ? new List<string>(favoriteMarkets.Split(',')) : new List<string>();
+
+            data = Startup.Binance.FavoriteMarketData(Startup.Binance.UpdateMarketData().Result, favoritesList);
             exchange = new ExchangeModel(Enums.Exchange.Binance, data);
             exchangeData.Add(exchange);
 
-            data = Startup.Ftx.FavoriteMarketData(Startup.Ftx.UpdateMarketData().Result, favoriteMarkets);
+            data = Startup.Ftx.FavoriteMarketData(Startup.Ftx.UpdateMarketData().Result, favoritesList);
             exchange = new ExchangeModel(Enums.Exchange.FTX, data);
             exchangeData.Add(exchange);
 
-            data = Startup.Bittrex.FavoriteMarketData(Startup.Bittrex.UpdateMarketData().Result, favoriteMarkets);
+            data = Startup.Bittrex.FavoriteMarketData(Startup.Bittrex.UpdateMarketData().Result, favoritesList);
             exchange = new ExchangeModel(Enums.Exchange.Bittrex, data);
             exchangeData.Add(exchange);
 

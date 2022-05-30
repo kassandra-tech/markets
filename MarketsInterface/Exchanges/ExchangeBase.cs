@@ -188,12 +188,14 @@ namespace MarketsInterface.Exchanges
             return data.FindAll(x => favoriteMarkets.Contains(x.Market));
         }
 
-        internal static List<Enums.Exchange> GetActiveExchanges(List<Enums.Exchange> exchangeFilter)
+        internal static List<Enums.Exchange> GetActiveExchanges(string exchangeFilter)
         {
-            List<Enums.Exchange> exchanges = new List<Enums.Exchange>();
-            foreach (var item in exchangeFilter)
+            var exchanges = new List<Enums.Exchange>();
+            var filters = !string.IsNullOrWhiteSpace(exchangeFilter) ? exchangeFilter.Split(',') : new string[] { };
+            foreach (var item in filters)
             {
-                exchanges.Add(item);
+                _ = Enum.TryParse(item, out Enums.Exchange exchange);
+                exchanges.Add(exchange);
             }
 
             return exchanges;
