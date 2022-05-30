@@ -23,11 +23,6 @@ namespace MarketsInterface.Exchanges
         public ExchangeBase()
         {
             Markets = new List<MarketNameModel>();
-
-            if (FavoriteMarkets == null)
-            {
-                FavoriteMarkets = new List<string>();
-            }
         }
 
         /// <summary>
@@ -156,35 +151,30 @@ namespace MarketsInterface.Exchanges
             return MarketData;
         }
 
-        /// <summary>
-        ///Market data filtered by MarketFilter selection.
-        /// </summary>
-        /// <param name="data">List of all MarketModel data matching the filter criteria.</param>
-        /// <returns></returns>
-        internal List<MarketModel> FilterMarketData(List<MarketModel> data)
+        
+        internal List<MarketModel> FilterMarketData(List<MarketModel> data, Enums.MarketFilters marketFilter)
         {
+            _ = Enum.TryParse(marketFilter.ToString(), out Enums.MarketFilters activeFilter);
+
             // The All case returns the raw data.
-            if (ActiveMarketFilter == Enums.MarketFilters.Favorites)
-            {
-                data = data.FindAll(x => FavoriteMarkets.Contains(x.Market));
-            }
-            else if (ActiveMarketFilter == Enums.MarketFilters.BTC)
+            // The Favorites case is handled by FavoriteMarketData.
+            if (activeFilter == Enums.MarketFilters.BTC)
             {
                 data = data.FindAll(x => x.QuoteCurrency == BtcSymbol);
             }
-            else if (ActiveMarketFilter == Enums.MarketFilters.USD)
+            else if (activeFilter == Enums.MarketFilters.USD)
             {
                 data = data.FindAll(x => x.QuoteCurrency == UsdSymbol);
             }
-            else if (ActiveMarketFilter == Enums.MarketFilters.USDT)
+            else if (activeFilter == Enums.MarketFilters.USDT)
             {
                 data = data.FindAll(x => x.QuoteCurrency == UsdtSymbol);
             }
-            else if (ActiveMarketFilter == Enums.MarketFilters.ETH)
+            else if (activeFilter == Enums.MarketFilters.ETH)
             {
                 data = data.FindAll(x => x.QuoteCurrency == EthSymbol);
             }
-            else if (ActiveMarketFilter == Enums.MarketFilters.BNB)
+            else if (activeFilter == Enums.MarketFilters.BNB)
             {
                 data = data.FindAll(x => x.QuoteCurrency == BnbSymbol);
             }
@@ -192,7 +182,24 @@ namespace MarketsInterface.Exchanges
             return data;
         }
 
-        internal static bool IsExchangeActive(Enums.Exchange exchange) => ActiveExchanges.Contains(exchange) || ActiveExchanges.Count == 0;
+        
+        internal List<MarketModel> FavoriteMarketData(List<MarketModel> data, List<string> favoriteMarkets)
+        {
+            return data.FindAll(x => favoriteMarkets.Contains(x.Market));
+        }
+
+        internal static List<Enums.Exchange> GetActiveExchanges(List<Enums.Exchange> exchangeFilter)
+        {
+            List<Enums.Exchange> exchanges = new List<Enums.Exchange>();
+            foreach (var item in exchangeFilter)
+            {
+                exchanges.Add(item);
+            }
+
+            return exchanges;
+        }
+
+        internal static bool IsExchangeActive(Enums.Exchange exchange, List<Enums.Exchange> exchangeFilter) => exchangeFilter.Contains(exchange) || exchangeFilter.Count == 0;
 
         internal abstract string BaseAddress { get; }
         internal abstract string CurrencyInformation { get; }
@@ -201,9 +208,6 @@ namespace MarketsInterface.Exchanges
 
         internal static ConcurrentDictionary<string, string> Currencies = new();
         internal static ConcurrentDictionary<string, List<string>> MarketExchanges = new();
-        internal static List<Enums.Exchange> ActiveExchanges = new();
-        internal static Enums.MarketFilters ActiveMarketFilter { get; set; }
-        internal static List<string> FavoriteMarkets { get; set; }
 
         internal List<MarketModel> MarketData { get; set; }
         internal List<MarketNameModel> Markets { get; set; }

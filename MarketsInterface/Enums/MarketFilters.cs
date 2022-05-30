@@ -10,10 +10,6 @@
         /// </summary>
         All = 1,
         /// <summary>
-        /// Favorites
-        /// </summary>
-        Favorites,
-        /// <summary>
         /// BTC
         /// </summary>
         BTC,

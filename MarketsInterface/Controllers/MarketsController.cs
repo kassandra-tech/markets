@@ -23,58 +23,70 @@ namespace MarketsInterface.Controllers
         }
 
         /// <summary>
-        /// Available markets based on the Market, Exchange, and Favorite filters. 
+        /// Available currencies.
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        public async Task<List<ExchangeMarketsModel>> Markets()
+        public ICollection<string> Currencies()
+        {
+            return ExchangeBase.Currencies.Keys;
+        }
+
+        /// <summary>
+        /// Available markets. 
+        /// </summary>
+        /// <param name="exchangeFilter">Exchanges to get data from. See <see cref="Enums.Exchange"/> for available options ex: 1,2,3,4</param>
+        /// <returns></returns>
+        [HttpPost]
+        public async Task<List<ExchangeMarketsModel>> Markets(List<Enums.Exchange> exchangeFilter)
         {
             var list = new List<ExchangeMarketsModel>();
             ExchangeMarketsModel item;
+            var exchanges = ExchangeBase.GetActiveExchanges(exchangeFilter);
 
-            if (ExchangeBase.IsExchangeActive(Enums.Exchange.Binance))
+            if (ExchangeBase.IsExchangeActive(Enums.Exchange.Binance, exchanges))
             {
                 item = new ExchangeMarketsModel(Enums.Exchange.Binance, await Startup.Binance.UpdateMarkets());
 
                 list.Add(item);
             }
 
-            if (ExchangeBase.IsExchangeActive(Enums.Exchange.Coinbase))
+            if (ExchangeBase.IsExchangeActive(Enums.Exchange.Coinbase, exchanges))
             {
                 item = new ExchangeMarketsModel(Enums.Exchange.Coinbase, await Startup.Coinbase.UpdateMarkets());
 
                 list.Add(item);
             }
 
-            if (ExchangeBase.IsExchangeActive(Enums.Exchange.KuCoin))
+            if (ExchangeBase.IsExchangeActive(Enums.Exchange.KuCoin, exchanges))
             {
                 item = new ExchangeMarketsModel(Enums.Exchange.KuCoin, await Startup.KuCoin.UpdateMarkets());
 
                 list.Add(item);
             }
 
-            if (ExchangeBase.IsExchangeActive(Enums.Exchange.HuobiGlobal))
+            if (ExchangeBase.IsExchangeActive(Enums.Exchange.HuobiGlobal, exchanges))
             {
                 item = new ExchangeMarketsModel(Enums.Exchange.HuobiGlobal, await Startup.HuobiGlobal.UpdateMarkets());
 
                 list.Add(item);
             }
 
-            if (ExchangeBase.IsExchangeActive(Enums.Exchange.FTX))
+            if (ExchangeBase.IsExchangeActive(Enums.Exchange.FTX, exchanges))
             {
                 item = new ExchangeMarketsModel(Enums.Exchange.FTX, await Startup.Ftx.UpdateMarkets());
 
                 list.Add(item);
             }
 
-            if (ExchangeBase.IsExchangeActive(Enums.Exchange.Kraken))
+            if (ExchangeBase.IsExchangeActive(Enums.Exchange.Kraken, exchanges))
             {
                 item = new ExchangeMarketsModel(Enums.Exchange.Kraken, await Startup.Kraken.UpdateMarkets());
 
                 list.Add(item);
             }
 
-            if (ExchangeBase.IsExchangeActive(Enums.Exchange.Bittrex))
+            if (ExchangeBase.IsExchangeActive(Enums.Exchange.Bittrex, exchanges))
             {
                 item = new ExchangeMarketsModel(Enums.Exchange.Bittrex, await Startup.Bittrex.UpdateMarkets());
 
@@ -85,34 +97,38 @@ namespace MarketsInterface.Controllers
         }
 
         /// <summary>
-        /// Market data based on the current market and exchange filter settings.
+        /// Market data based on the provided market and exchange filter.
         /// </summary>
+        /// <param name="marketsFilter">Markets to return data for.</param>
+        /// <param name="exchangesFilter">Exchanges to get data from. See <see cref="Enums.Exchange"/> for available options ex: 1,2,3,4</param>
         /// <returns></returns>
-        [HttpGet]
+        [HttpPost]
         [Route("data")]
-        public List<ExchangeModel> MarketData()
+        public List<ExchangeModel> MarketData(Enums.MarketFilters marketsFilter, List<Enums.Exchange> exchangesFilter)
         {
             var exchangeData = new List<ExchangeModel>();
             List<MarketModel> data;
             ExchangeModel exchange;
 
-            if (ExchangeBase.IsExchangeActive(Enums.Exchange.Binance))
+            var exchanges = ExchangeBase.GetActiveExchanges(exchangesFilter);
+
+            if (ExchangeBase.IsExchangeActive(Enums.Exchange.Binance, exchanges))
             {
-                data = Startup.Binance.FilterMarketData(Startup.Binance.UpdateMarketData().Result);
+                data = Startup.Binance.FilterMarketData(Startup.Binance.UpdateMarketData().Result, marketsFilter);
                 exchange = new ExchangeModel(Enums.Exchange.Binance, data);
                 exchangeData.Add(exchange);
             }
 
-            if (ExchangeBase.IsExchangeActive(Enums.Exchange.FTX))
+            if (ExchangeBase.IsExchangeActive(Enums.Exchange.FTX, exchanges))
             {
-                data = Startup.Ftx.FilterMarketData(Startup.Ftx.UpdateMarketData().Result);
+                data = Startup.Ftx.FilterMarketData(Startup.Ftx.UpdateMarketData().Result, marketsFilter);
                 exchange = new ExchangeModel(Enums.Exchange.FTX, data);
                 exchangeData.Add(exchange);
             }
 
-            if (ExchangeBase.IsExchangeActive(Enums.Exchange.Bittrex))
+            if (ExchangeBase.IsExchangeActive(Enums.Exchange.Bittrex, exchanges))
             {
-                data = Startup.Bittrex.FilterMarketData(Startup.Bittrex.UpdateMarketData().Result);
+                data = Startup.Bittrex.FilterMarketData(Startup.Bittrex.UpdateMarketData().Result, marketsFilter);
                 exchange = new ExchangeModel(Enums.Exchange.Bittrex, data);
                 exchangeData.Add(exchange);
             }
@@ -121,97 +137,31 @@ namespace MarketsInterface.Controllers
         }
 
         /// <summary>
-        /// Markets in view.
+        /// Market data for all favorite markets.
         /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("market-filter")]
-        public Enums.MarketFilters GetMarketDataFilter()
-        {
-            return ExchangeBase.ActiveMarketFilter;
-        }
-
-        /// <summary>
-        /// Update Markets in view.
-        /// </summary>
+        /// <param name="favoriteMarkets">List of favorite markets. ex: "BTC-USD", "ETH-BTC"</param>
         /// <returns></returns>
         [HttpPost]
-        [Route("update/market-filter")]
-        public Enums.MarketFilters UpdateFilteredMarketData(Enums.MarketFilters marketFilter)
+        [Route("favorites")]
+        public List<ExchangeModel> MarketData(List<string> favoriteMarkets)
         {
-            ExchangeBase.ActiveMarketFilter = marketFilter;
+            var exchangeData = new List<ExchangeModel>();
+            List<MarketModel> data;
+            ExchangeModel exchange;
 
-            return ExchangeBase.ActiveMarketFilter;
-        }
+            data = Startup.Binance.FavoriteMarketData(Startup.Binance.UpdateMarketData().Result, favoriteMarkets);
+            exchange = new ExchangeModel(Enums.Exchange.Binance, data);
+            exchangeData.Add(exchange);
 
-        /// <summary>
-        /// Exchanges in view.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("exchange-filter")]
-        public List<Enums.Exchange> ActiveExchanges()
-        {
-            return ExchangeBase.ActiveExchanges;
-        }
+            data = Startup.Ftx.FavoriteMarketData(Startup.Ftx.UpdateMarketData().Result, favoriteMarkets);
+            exchange = new ExchangeModel(Enums.Exchange.FTX, data);
+            exchangeData.Add(exchange);
 
-        /// <summary>
-        /// Update Exchanges in view.
-        /// </summary>
-        /// <param name="exchanges">Exchanges to view data for.</param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("update/exchange-filter")]
-        public List<Enums.Exchange> UpdateActiveExchanges(List<Enums.Exchange> exchanges)
-        {
-            ExchangeBase.ActiveExchanges = exchanges;
+            data = Startup.Bittrex.FavoriteMarketData(Startup.Bittrex.UpdateMarketData().Result, favoriteMarkets);
+            exchange = new ExchangeModel(Enums.Exchange.Bittrex, data);
+            exchangeData.Add(exchange);
 
-            return ExchangeBase.ActiveExchanges;
-        }
-
-        /// <summary>
-        /// Favorite Market favorites list.
-        /// </summary>
-        /// <returns></returns>
-        [HttpGet]
-        [Route("favorite-market")]
-        public List<string> FavoriteMarkets()
-        {
-            return ExchangeBase.FavoriteMarkets;
-        }
-
-        /// <summary>
-        /// Update favorite markets list.
-        /// </summary>
-        /// <param name="market">Market to add or remove from the list. Format is 'ETH-BTC'</param>
-        /// <param name="addMarket">When true the market will be added to the favorites list. False it will be removed from the list.</param>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("update/favorite-market")]
-        public List<string> UpdateFavoriteMarkets(string market, bool addMarket = true)
-        {
-            if (!ExchangeBase.FavoriteMarkets.Contains(market) && addMarket)
-            {
-                ExchangeBase.FavoriteMarkets.Add(market);
-            }
-            else if (ExchangeBase.FavoriteMarkets.Contains(market) && !addMarket)
-            {
-                ExchangeBase.FavoriteMarkets.Remove(market);
-            }
-
-            return ExchangeBase.FavoriteMarkets;
-        }
-
-        /// <summary>
-        /// Clear Market and Exchange filters.
-        /// </summary>
-        /// <returns></returns>
-        [HttpPost]
-        [Route("update/clear-filters")]
-        public void ClearFilters()
-        {
-            ExchangeBase.ActiveExchanges = new();
-            ExchangeBase.ActiveMarketFilter = new();
+            return exchangeData;
         }
     }
 }
