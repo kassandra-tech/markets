@@ -36,14 +36,14 @@ namespace MarketsInterface.Controllers
         /// <summary>
         /// Available markets. 
         /// </summary>
-        /// <param name="exchangeFilter">Exchanges to get data from. See <see cref="Enums.Exchange"/> for available options ex: 1,2,3,4</param>
+        /// <param name="exchangesFilter">Exchanges to get data from. Available options are Binance,Coinbase,KuCoin,HuobiGlobal,FXT,Kraken,Bittrex, ex: Binance,Coinbase</param>
         /// <returns></returns>
         [HttpGet]
-        public async Task<List<ExchangeMarketsModel>> Markets(string exchangeFilter)
+        public async Task<List<ExchangeMarketsModel>> Markets(string exchangesFilter)
         {
             var list = new List<ExchangeMarketsModel>();
             ExchangeMarketsModel item;
-            var exchanges = ExchangeBase.GetActiveExchanges(exchangeFilter);
+            var exchanges = ExchangeBase.GetActiveExchanges(exchangesFilter);
 
             if (ExchangeBase.IsExchangeActive(Enums.Exchange.Binance, exchanges))
             {
@@ -101,11 +101,11 @@ namespace MarketsInterface.Controllers
         /// Market data based on the provided market and exchange filter.
         /// </summary>
         /// <param name="marketsFilter">Markets to return data for.</param>
-        /// <param name="exchangesFilter">Exchanges to get data from. See <see cref="Enums.Exchange"/> for available options ex: 1,2,3,4</param>
+        /// <param name="exchangesFilter">Exchanges to get data from. Available options are Binance,Coinbase,KuCoin,HuobiGlobal,FXT,Kraken,Bittrex, ex: Binance,Coinbase</param>
         /// <returns></returns>
         [HttpGet]
         [Route("data")]
-        public List<ExchangeModel> MarketData(Enums.MarketFilters marketsFilter, string exchangesFilter)
+        public List<ExchangeModel> MarketData(Enums.MarketFilters marketsFilter, string exchangesFilter = "")
         {
             var exchangeData = new List<ExchangeModel>();
             List<MarketModel> data;
@@ -144,7 +144,7 @@ namespace MarketsInterface.Controllers
         /// <returns></returns>
         [HttpGet]
         [Route("favorites")]
-        public List<ExchangeModel> MarketData(string favoriteMarkets)
+        public List<ExchangeModel> FavoriteMarkets(string favoriteMarkets)
         {
             var exchangeData = new List<ExchangeModel>();
             List<MarketModel> data;

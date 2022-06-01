@@ -4,6 +4,7 @@ obj
 packages
 
 # User files
+*.user
 *.suo
 *.vs
 
