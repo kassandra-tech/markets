@@ -3,7 +3,7 @@ import MarketDataTable from "../components/market-data-table/market-data-table";
 import Image from 'next/image';
 import placeholder from '../public/Header main.png';
 import Head from "next/head";
-import React from "react";
+import React, {useEffect} from "react";
 import styled from "styled-components";
 import MarketCell from "../components/market-data-table/components/cells/market-cell";
 import {Currencies} from "../services/constants";
@@ -12,6 +12,7 @@ import IndicatorCell from "../components/market-data-table/components/cells/indi
 import {VolumeCell} from "../components/market-data-table/components/cells/volume-cell";
 import ExchangesCell from "../components/market-data-table/components/cells/exchanges-cell";
 import ExpandableRow from "../components/market-data-table/components/expandable-row";
+import {getCurrencies, getFavorites, getMarkets, getMarketsData} from "../services/market.api.service";
 
 const StyledPageContainer = styled.div`
   display: flex;
@@ -159,6 +160,31 @@ const filters = [
 ];
 
 const Home: NextPage = () => {
+
+    useEffect(() => {
+        void loadCurrencies();
+        void loadMarkets();
+        void loadFavorites();
+        void loadData();
+    }, [])
+
+    const loadCurrencies = async () => {
+        const response = await getCurrencies();
+        console.log('currencies response', response);
+    }
+    const loadMarkets = async () => {
+        const response = await getMarkets();
+        console.log('markets response', response);
+    }
+    const loadFavorites = async () => {
+        const response = await getFavorites();
+        console.log('favorites response', response);
+    }
+
+    const loadData = async () => {
+        const response = await getMarketsData();
+        console.log('datatable data response', response);
+    }
 
     return (
         <>

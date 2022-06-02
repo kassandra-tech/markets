@@ -8,23 +8,21 @@ interface StyledProps {
 const StyledFilterButton = styled.button<StyledProps>`
   width: 160px;
   height: 30px;
-  background: ${({selected}: StyledProps) => selected ? '#2C2F39' : '#2C2F33' };
+  background: #2C2F33;
   border-radius: 5px;
   font-weight: 400;
   font-size: 16px;
   line-height: 20px;
   display: flex;
   align-items: center;
-  color: rgba(255, 255, 255, 0.6);
+  color: ${(props) => props.selected ? props.theme.colors.cryptoGreen : props.theme.colors.grey};
   margin-top: 10px;
   outline: none;
   border: 0;
+  box-shadow: ${({selected}: StyledProps) => selected ? 'inset -5.22px -5.22px 5.22px #3B4451, inset 3.73381px 3.73381px 6.22302px #000000;' : '' };
   &:hover {
-    background: #2C2F39;
+    box-shadow: -5.5px -5.5px 10.5px #3B4451, 3.5px 3.5px 18.5px #000000;
   }
-  /*-webkit-box-shadow: ${({selected}: StyledProps) => selected ? 'inset 0px 0px 5px #000000' : '' };
-  -moz-box-shadow: ${({selected}: StyledProps) => selected ? 'inset 0px 0px 5px #000000' : '' };
-  box-shadow: ${({selected}: StyledProps) => selected ? 'inset 0px 0px 5px #000000' : '' };*/
 `;
 
 export interface FilterButtonProps {

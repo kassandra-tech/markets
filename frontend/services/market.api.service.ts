@@ -1,36 +1,39 @@
-
-export function getMarkets() {
-    //return fetch(`${env.baseUrl}/Markets/markets`);
+export async function getCurrencies() {
+    try {
+        return await fetch(`${process.env.NEXT_PUBLIC_HOST}/markets/currencies`, {
+            credentials: 'include'
+        });
+    } catch(_) {
+        return [];
+    }
 }
 
-export function getOrderbook() {
-    //return fetch(`${env.baseUrl}/Markets/orderbook`);
+export async function getMarkets() {
+    try {
+        return await fetch(`${process.env.NEXT_PUBLIC_HOST}/markets`, {
+            credentials: 'include'
+        });
+    } catch(_) {
+        return [];
+    }
 }
 
-export function getMarketPrice() {
-    //return fetch(`${env.baseUrl}/Markets/market/price`);
+export async function getMarketsData() {
+    try {
+        return await fetch(`${process.env.NEXT_PUBLIC_HOST}/markets/data`, {
+            credentials: 'include'
+        });
+    } catch(_) {
+        return [];
+    }
 }
 
-export function getMarketPriceRange() {
-    //return fetch(`${env.baseUrl}/Markets/market/price/range`);
-}
-
-export function getMarketVolume() {
-    //return fetch(`${env.baseUrl}/Markets/market/volume`);
-}
-
-export function getMarketPriceIndicator() {
-    //return fetch(`${env.baseUrl}/Markets/market/price/indicator`);
-}
-
-export function getMarketExchanges() {
-    //return fetch(`${env.baseUrl}/Markets/market/exchanges`);
-}
-
-export function getMarketRank() {
-    //return fetch(`${env.baseUrl}/Markets/market/rank`);
-}
-
-export function getMarketRating() {
-    //return fetch(`${env.baseUrl}/Markets/market/rating`);
+export async function getFavorites() {
+    try {
+        return await fetch(`${process.env.NEXT_PUBLIC_HOST}/markets/favorites`, {
+            credentials: 'include'
+        });
+    } catch(_) {
+        return [];
+    }
 }

@@ -53,7 +53,7 @@ export default function TableFilters({filtersChange, data = []}: TableFiltersPar
 
     return (
         <StyledFiltersContainer>
-            <TableHeader>Time ID</TableHeader>
+            {/*<TableHeader>Time ID</TableHeader>*/}
             <StyledFilterBody>
                 <FiltersTitleStyles />
                 <StyledFilters>

@@ -7,6 +7,7 @@ import {useEffect, useState} from "react";
 import {Currencies, SortingStates} from "../../services/constants";
 import TableRow from "./components/table-row";
 import {orderBy, isArray, isObject, forOwn} from 'lodash';
+import {NoDataStyles} from "./styled/no-data.styles";
 
 const Container = styled.main`
       display: flex;
@@ -145,7 +146,7 @@ export default function MarketDataTable(
                     expandable={expandable}
                     expandableComponent={expandableComponent}
                 />)}
-                {visibleData.length === 0 && <h1>No data for current filter</h1>}
+                {visibleData.length === 0 && <NoDataStyles>No data available</NoDataStyles>}
             </div>
 
         </StyledDataTableContainer>
