@@ -72,7 +72,10 @@ namespace MarketsInterface
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
-            app.UseCors();
+
+            app.UseCors( options =>
+               options.AllowAnyOrigin() 
+                );
 
             app.UseEndpoints(endpoints =>
             {
