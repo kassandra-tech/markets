@@ -3,11 +3,13 @@ import {FlexColumn} from "../styled-wrappers";
 import TableFilters, {baseFilterValues, TableFilter} from "./components/table-filters";
 import TableHeader from "./components/table-header";
 import {v4 as uuidV4} from 'uuid';
-import {useEffect, useState} from "react";
+import React, {ReactNode, useEffect, useState} from "react";
 import {Currencies, SortingStates} from "../../services/constants";
 import TableRow from "./components/table-row";
 import {orderBy, isArray, isObject, forOwn} from 'lodash';
 import {NoDataStyles} from "./styled/no-data.styles";
+import {Simulate} from "react-dom/test-utils";
+import click = Simulate.click;
 
 const Container = styled.main`
       display: flex;
@@ -25,13 +27,14 @@ const StyledDataTableContainer = styled(FlexColumn)`
     .table-header {
       width: 1185px;
       display: flex;
+      padding-left: 15px;
     }
     .table-body {
       width: 100%;
       display: flex;
       flex-direction: column;
       height: 715px;
-      padding: 15px 25px 15px 0;
+      padding: 15px 25px 15px 15px;
       overflow-y: scroll;
     }
 `;
@@ -50,8 +53,12 @@ export interface MarketDataTableProps {
     data: any[];
     expandable: boolean;
     expandableComponent: any;
-    filterField: string;
+    rowComponent?: any;
+    filterField?: string; // todo remove if filtering will be only on server side
     filters: TableFilter[];
+    filtersChange: (value: any) => {};
+    loadFavorites: (value: any) => {};
+    getSortingFieldValue?: (item: any, field: string) => {};
 }
 
 export default function MarketDataTable(
@@ -60,8 +67,12 @@ export default function MarketDataTable(
         data = [],
         expandable = false,
         expandableComponent = <div/>,
-        filterField,
-        filters
+        rowComponent = null,
+        //filterField,
+        filters,
+        filtersChange,
+        loadFavorites,
+        getSortingFieldValue = (item, field) => item[field]
     }: MarketDataTableProps
 ) {
 
@@ -73,7 +84,13 @@ export default function MarketDataTable(
         field: ''
     })
 
-    const filtersChange = (value: any) => {
+    useEffect(() => {
+        console.log('new data', data);
+        setInternalData(data);
+        setVisibleData(data);
+    }, [data]);
+
+    /*const filtersChange = (value: any) => {
         if(value === baseFilterValues.all) {
             return setVisibleData(internalData);
         }
@@ -96,7 +113,7 @@ export default function MarketDataTable(
         });
 
         setVisibleData(filteredData);
-    }
+    }*/
 
     const sortChange = (order: SortingStates, field: string) => {
         setSortingState({
@@ -108,21 +125,23 @@ export default function MarketDataTable(
     useEffect(() => {
         const {field, order} = sortingState;
         let sortedData = [];
-        if(isArray(internalData[0][field])) {
-            sortedData = orderBy(internalData, (item) => item[field][0], [order]);
+        console.log(field, order, internalData);
+        /*if(isArray(internalData[0][field])) {
+            sortedData = orderBy(internalData, (item) => getSortingFieldValue(item, field), [order]);
         } else if(isObject(internalData[0][field])) {
             // todo rethink sorting of object fields
-            sortedData = orderBy(internalData, (item) => item[field].name, [order]);
+            sortedData = orderBy(internalData, (item) => getSortingFieldValue(item, field), [order]);
         } else {
             sortedData = orderBy(internalData, [field], [order]);
-        }
+        }*/
+        sortedData = orderBy(internalData, (item) => getSortingFieldValue(item, field), [order]);
         setVisibleData(sortedData);
     }, [sortingState]);
-
-
+    console.log('visible data: ', visibleData);
     return <Container>
         <TableFilters
             filtersChange={filtersChange}
+            loadFavorites={loadFavorites}
             data={filters}
         />
         <StyledDataTableContainer>
@@ -139,7 +158,20 @@ export default function MarketDataTable(
                 }
             </div>
             <div className="table-body">
-                {visibleData.length > 0 && visibleData.map((item: any) => <TableRow
+                {visibleData.length > 0 && visibleData.map((item: any) => rowComponent ?
+                    /*rowComponent({
+                        data: item,
+                        columns: columns,
+                        expandable: expandable,
+                        expandableComponent: expandableComponent,
+                    })*/
+                    React.cloneElement(rowComponent, {
+                        data: item,
+                        columns: columns,
+                        expandable: expandable,
+                        expandableComponent: expandableComponent,
+                        key: uuidV4()
+                    }) : <TableRow
                     data={item}
                     columns={columns}
                     key={uuidV4()}

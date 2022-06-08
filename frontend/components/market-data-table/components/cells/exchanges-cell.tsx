@@ -11,12 +11,17 @@ const SpanStyles = styled.span`
     color: ${props => props.theme.colors.secondaryWhite};
 `;
 
-export default function ExchangesCell({width}: {width: number}) {
+export interface ExchangesCellProps {
+    value: string[];
+    width: number
+}
+
+export default function ExchangesCell({width, value}: ExchangesCellProps) {
     return <CellStyles width={width} justify="space-around">
         <Image src={bnb} alt='binance'/>
         <Image src={exodus} alt='exodus'/>
         <Image src={cryptoCom} alt='crypto.com'/>
         <Image src={ftx} alt='ftx'/>
-        <SpanStyles>+215</SpanStyles>
+        <SpanStyles>+{value.length}</SpanStyles>
     </CellStyles>
 }

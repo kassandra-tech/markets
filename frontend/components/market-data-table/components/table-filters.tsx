@@ -7,12 +7,12 @@ import {useState} from "react";
 import {v4 as uuidV4} from "uuid";
 
 const StyledFiltersContainer = styled.div`
-    width: 225px;
+  width: 225px;
 `;
 
 const StyledFilterBody = styled(FlexColumn)`
-  padding: 20px 20px 0 15px;
-  `;
+  padding: 20px 0 0 25px;
+`;
 
 const StyledFilters = styled(FlexColumnCentered)`
   margin-top: 30px;
@@ -28,6 +28,7 @@ const StyledFilters = styled(FlexColumnCentered)`
 
 export interface TableFiltersParams {
     filtersChange: Function;
+    loadFavorites: Function;
     data: TableFilter[];
 }
 
@@ -37,18 +38,22 @@ export interface TableFilter {
 }
 
 export enum baseFilterValues {
-    all= 'all',
-    favorites = 'favorites'
+    all = 0,
+    favorites = -1,
 }
 
 
-export default function TableFilters({filtersChange, data = []}: TableFiltersParams) {
+export default function TableFilters({filtersChange, loadFavorites, data = []}: TableFiltersParams) {
 
-    const [selectedFilter, setSelectedFilter] = useState<any>('');
+    const [selectedFilter, setSelectedFilter] = useState<number>(0);
 
-    const selectFilter = (param: any) => {
-        setSelectedFilter(param);
-        filtersChange(param);
+    const selectFilter = (filterValue: number) => {
+        setSelectedFilter(filterValue);
+        if(filterValue === baseFilterValues.favorites) {
+            loadFavorites();
+        } else {
+            filtersChange(filterValue);
+        }
     }
 
     return (

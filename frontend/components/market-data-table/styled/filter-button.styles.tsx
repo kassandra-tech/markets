@@ -21,7 +21,7 @@ const StyledFilterButton = styled.button<StyledProps>`
   border: 0;
   box-shadow: ${({selected}: StyledProps) => selected ? 'inset -5.22px -5.22px 5.22px #3B4451, inset 3.73381px 3.73381px 6.22302px #000000;' : '' };
   &:hover {
-    box-shadow: -5.5px -5.5px 10.5px #3B4451, 3.5px 3.5px 18.5px #000000;
+    box-shadow: ${(props) => props.selected ? null : '-5.5px -5.5px 10.5px #3B4451, 3.5px 3.5px 18.5px #000000'};
   }
 `;
 

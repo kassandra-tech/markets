@@ -5,13 +5,11 @@ export enum SortingStates {
 }
 
 export enum Currencies {
-    'btc',
-    'eth',
-    'bnb',
-    'mana',
-    'vet',
-    'usdt',
-    'usd'
+    'btc' = 2,
+    'usd' = 3,
+    'usdt' = 4,
+    'eth' = 5,
+    'bnb' = 6,
 }
 
 export enum Markets {

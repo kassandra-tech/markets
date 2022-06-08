@@ -22,39 +22,42 @@ const SpanStyles = styled.span<SpanProps>`
 
 export interface IndicatorCellProps {
     width: number,
-    value: number;
+    value: {
+        percentage: number;
+        label: string;
+    };
 }
 
 
 export default function IndicatorCell({width, value}: IndicatorCellProps) {
     const {colors} = useContext(ThemeContext)
 
-    // todo define percentage and rewrite.
-    const isSell = value > 66;
-    const isStrongSell = value > 90;
-    const isBuy = value < 40;
-    const isStrongBuy = value > 20 && value < 40;
+    // todo define percentage.
+    const isSell = value.percentage > 66;
+    const isStrongSell = value.percentage > 90;
+    const isBuy = value.percentage < 40;
+    const isStrongBuy = value.percentage > 20 && value.percentage < 40;
     const color = isBuy ? colors.cryptoGreen : isSell ? colors.superRed : colors.yellow;
     const justify =  isBuy ? 'start' : isSell ? 'end' : 'center';
 
     return <CellStyles width={width} direction="column">
         <SpanStyles color={color} justify={justify}>
             {isBuy && <>
-                <span>+{value}%&nbsp;</span>
+                <span>+{value.percentage.toFixed(2)}%&nbsp;</span>
                 {isStrongBuy ? `Strong ` : ''}
                 Buy
             </>}
             {isSell && <>
                 {isStrongSell ? 'Strong ' : ''}
                 Sell&nbsp;
-                <span>-{value}%</span>
+                <span>-{value.percentage.toFixed(2)}%</span>
             </>}
             {(!isBuy && !isSell) && <>
-                <span>{value}%&nbsp;</span>
+                <span>{value.percentage.toFixed(2)}%&nbsp;</span>
                 Hold
             </>}
         </SpanStyles>
 
-        <Indicator value={value}/>
+        <Indicator value={value.percentage}/>
     </CellStyles>
 }

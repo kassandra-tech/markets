@@ -4,7 +4,7 @@ import tether from '../../../../public/currencies/tether.png';
 
 export interface VolumeProps {
     width: number;
-    value: number;
+    value: string;
 }
 
 export function VolumeCell({width, value}: VolumeProps) {
