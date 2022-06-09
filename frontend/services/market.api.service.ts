@@ -31,7 +31,7 @@ export async function getMarkets(): Promise<any> {
     }
 }
 
-export async function getMarketsData(marketsFilter: number): Promise<MarketDataResponseModel[]> {
+export async function getMarketsData(marketsFilter = 1 ): Promise<MarketDataResponseModel[]> {
     try {
         return await fetch(`${process.env.NEXT_PUBLIC_HOST}/markets/data?marketsFilter=${marketsFilter}`, {
             //credentials: 'include',
