@@ -47,11 +47,6 @@ export default function ExpandableRow({data = []}: {data?: MarketDataModel[]}) {
         hasMore={hasMore}
         loader={<h4>Loading...</h4>}
         height={310}
-        endMessage={
-            <p style={{ textAlign: "center" }}>
-                <b>Yay! You have seen it all</b>
-            </p>
-        }
     >
         {items.map((item: MarketDataModel) => <RowStyles key={uuidV4()}>
             <MarketRowLine data={item}/>

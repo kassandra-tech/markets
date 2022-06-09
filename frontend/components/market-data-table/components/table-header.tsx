@@ -29,6 +29,8 @@ export default function TableHeader(
 
     const sort = () => {
 
+        if(!sortable) return;
+
         if(sortSelected === SortingStates.none) {
             onSort(SortingStates.asc);
         }
@@ -42,7 +44,7 @@ export default function TableHeader(
     }
 
 
-    return <HeaderStyles width={width} role="button" onClick={sort} selected={selected}>
+    return <HeaderStyles width={width} role={sortable ? 'button' : 'columnheader'} onClick={sort} selected={selected} sortable={sortable}>
         <span>
             {children}
         </span>

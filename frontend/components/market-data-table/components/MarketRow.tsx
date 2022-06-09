@@ -31,7 +31,7 @@ export default function MarketRow({
 
     return (
         <RowWithHover role="button" onClick={() => expandable ? switchToggle() : null}>
-            <MarketRowLine data={rootItemData}/>
+            {rootItemData && <MarketRowLine data={rootItemData}/>}
             {toggleFlag && React.cloneElement(expandableComponent, { data: expandableData})}
         </RowWithHover>
 

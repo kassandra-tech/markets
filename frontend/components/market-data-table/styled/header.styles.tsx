@@ -3,6 +3,7 @@ import styled from "styled-components";
 interface StyledHeaderProps {
     width?: number;
     selected?: boolean;
+    sortable?: boolean;
 }
 
 export const HeaderStyles = styled.div<StyledHeaderProps>`
@@ -17,7 +18,7 @@ export const HeaderStyles = styled.div<StyledHeaderProps>`
     font-weight: 400;
     font-size: 16px;
     color: ${props => props.selected ? props.theme.colors.white : props.theme.colors.grey};
-    cursor: pointer;
+    cursor:  ${props => props.sortable ? 'pointer' : 'auto'};
     min-width: 110px;
     padding: 0  10px;
     .info {

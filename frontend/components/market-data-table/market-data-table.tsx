@@ -41,7 +41,7 @@ const StyledDataTableContainer = styled(FlexColumn)`
 
 export interface Column {
     name: string;
-    sortable: boolean;
+    sortable?: boolean;
     width?: number;
     dataField: string;
     withInfo?: boolean;
@@ -68,7 +68,6 @@ export default function MarketDataTable(
         expandable = false,
         expandableComponent = <div/>,
         rowComponent = null,
-        //filterField,
         filters,
         filtersChange,
         loadFavorites,
@@ -85,35 +84,9 @@ export default function MarketDataTable(
     })
 
     useEffect(() => {
-        console.log('new data', data);
         setInternalData(data);
         setVisibleData(data);
     }, [data]);
-
-    /*const filtersChange = (value: any) => {
-        if(value === baseFilterValues.all) {
-            return setVisibleData(internalData);
-        }
-
-        if(value === baseFilterValues.favorites) {
-            //todo add favorites filtering
-            return setVisibleData(internalData);
-        }
-
-        const filteredData = data.filter((item: any) => {
-            const dataItemValue = item[filterField];
-            if(isObject(dataItemValue)) {
-                const values = Object.values(dataItemValue);
-                return !!values.filter(val => val === value).length;
-            }
-            if(isArray(dataItemValue)) {
-                return !!dataItemValue.filter(val => val === value).length;
-            }
-            return dataItemValue === value;
-        });
-
-        setVisibleData(filteredData);
-    }*/
 
     const sortChange = (order: SortingStates, field: string) => {
         setSortingState({
@@ -125,19 +98,10 @@ export default function MarketDataTable(
     useEffect(() => {
         const {field, order} = sortingState;
         let sortedData = [];
-        console.log(field, order, internalData);
-        /*if(isArray(internalData[0][field])) {
-            sortedData = orderBy(internalData, (item) => getSortingFieldValue(item, field), [order]);
-        } else if(isObject(internalData[0][field])) {
-            // todo rethink sorting of object fields
-            sortedData = orderBy(internalData, (item) => getSortingFieldValue(item, field), [order]);
-        } else {
-            sortedData = orderBy(internalData, [field], [order]);
-        }*/
         sortedData = orderBy(internalData, (item) => getSortingFieldValue(item, field), [order]);
         setVisibleData(sortedData);
     }, [sortingState]);
-    console.log('visible data: ', visibleData);
+
     return <Container>
         <TableFilters
             filtersChange={filtersChange}
@@ -159,12 +123,6 @@ export default function MarketDataTable(
             </div>
             <div className="table-body">
                 {visibleData.length > 0 && visibleData.map((item: any) => rowComponent ?
-                    /*rowComponent({
-                        data: item,
-                        columns: columns,
-                        expandable: expandable,
-                        expandableComponent: expandableComponent,
-                    })*/
                     React.cloneElement(rowComponent, {
                         data: item,
                         columns: columns,

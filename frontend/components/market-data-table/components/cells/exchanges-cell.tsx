@@ -1,10 +1,8 @@
 import {CellStyles} from "../../styled/cell.styles";
 import Image from 'next/image';
-import bnb from '../../../../public/markets/bnb.png';
-import exodus from '../../../../public/markets/exodus.png';
-import cryptoCom from '../../../../public/markets/crypto-com.png';
-import ftx from '../../../../public/markets/ftx.png';
 import styled from "styled-components";
+import {v4 as uuidV4} from "uuid";
+import {getMarketIconByName} from "../../../../services/image-helper.service";
 
 const SpanStyles = styled.span`
     font-size: 16px;
@@ -17,11 +15,12 @@ export interface ExchangesCellProps {
 }
 
 export default function ExchangesCell({width, value}: ExchangesCellProps) {
+
+    const visible = value.slice(0, 4);
+    const rest = value.slice(4);
+
     return <CellStyles width={width} justify="space-around">
-        <Image src={bnb} alt='binance'/>
-        <Image src={exodus} alt='exodus'/>
-        <Image src={cryptoCom} alt='crypto.com'/>
-        <Image src={ftx} alt='ftx'/>
-        <SpanStyles>+{value.length}</SpanStyles>
+        {visible.map(name => <Image src={getMarketIconByName(name)} alt={name} title={name} key={uuidV4()}/>)}
+        {rest.length > 0 && <SpanStyles>+{rest.length}</SpanStyles>}
     </CellStyles>
 }

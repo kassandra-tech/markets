@@ -11,7 +11,7 @@ export async function getCurrencies() {
     headers.append('Origin','http://localhost:3000');
     try {
         return await fetch(`${process.env.NEXT_PUBLIC_HOST}/markets/currencies`, {
-            credentials: 'include',
+            //credentials: 'include',
             mode: 'cors',
             headers: headers
         }).then(res => res.json());
@@ -23,7 +23,7 @@ export async function getCurrencies() {
 export async function getMarkets(): Promise<any> {
     try {
         return await fetch(`${process.env.NEXT_PUBLIC_HOST}/markets`, {
-            credentials: 'include',
+            //credentials: 'include',
             mode: 'cors'
         }).then(res => res.json());
     } catch(_) {
@@ -31,21 +31,21 @@ export async function getMarkets(): Promise<any> {
     }
 }
 
-export async function getMarketsData(): Promise<MarketDataResponseModel[]> {
+export async function getMarketsData(marketsFilter: number): Promise<MarketDataResponseModel[]> {
     try {
-        return await fetch(`${process.env.NEXT_PUBLIC_HOST}/markets/data`, {
-            credentials: 'include',
+        return await fetch(`${process.env.NEXT_PUBLIC_HOST}/markets/data?marketsFilter=${marketsFilter}`, {
+            //credentials: 'include',
             mode: 'cors'
         }).then(res => res.json());
     } catch(_) {
-        return Promise.resolve(marketsDataResponse);
+        return Promise.resolve([]);
     }
 }
 
 export async function getFavorites(): Promise<MarketDataResponseModel[]> {
     try {
         return await fetch(`${process.env.NEXT_PUBLIC_HOST}/markets/favorites`, {
-            credentials: 'include',
+            //credentials: 'include',
             mode: 'cors'
         }).then(res => res.json());
     } catch(_) {
