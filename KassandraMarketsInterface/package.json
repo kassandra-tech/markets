@@ -1,0 +1,29 @@
+{
+  "name": "kassandra-markets-interface",
+  "version": "1.0.0",
+  "description": "Access to crypto market data",
+  "main": "index.js",
+  "scripts": {
+    "dev": "nodemon ./src/index.js",
+    "start": "node ./src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "markets"
+  },
+  "author": "Kassandra",
+  "license": "MIT",
+  "dependencies": {
+    "binance-api-node": "^0.11.40",
+    "cors": "^2.8.5",
+    "express": "^4.17.1",
+    "swagger-ui-express": "^4.1.6"
+  },
+  "nodemonConfig": {
+    "ext": "js",
+    "ignore": [
+      "*.test.ts"
+    ],
+    "delay": 2
+  }
+}
