@@ -15,8 +15,10 @@
   "license": "MIT",
   "dependencies": {
     "binance-api-node": "^0.11.40",
+    "coinbase-pro-node": "^5.0.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "moralis": "^1.8.0",
     "swagger-ui-express": "^4.1.6"
   },
   "nodemonConfig": {
@@ -25,5 +27,8 @@
       "*.test.ts"
     ],
     "delay": 2
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.16"
   }
 }

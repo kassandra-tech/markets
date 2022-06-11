@@ -26,11 +26,11 @@ class Binance {
                 data['quoteCurrency'] = market.quoteAsset;
                 marketsList.push(data);
             });
+
+            var market = new Markets(this.name, marketsList, time);
         } catch (error) {
             console.log("Error: " + error);
         }
-
-        var market = new Markets(this.name, marketsList, time);
 
         return market;
     }
