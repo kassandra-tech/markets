@@ -5,7 +5,9 @@ import ethIcon from '../../../../public/currencies/eth.png';
 import btcIcon from '../../../../public/currencies/btc.png';
 import manaIcon from '../../../../public/currencies/mana.png';
 import vetIcon from '../../../../public/currencies/vet.png';
-import {Currencies} from "../../../../services/constants";
+import solIcon from '../../../../public/currencies/sol.png';
+import tetherIcon from '../../../../public/currencies/tether.png';
+// import {Currencies} from "../../../../services/constants";
 import styled from "styled-components";
 
 const PaneStyles = styled.span`
@@ -53,22 +55,24 @@ export default function MarketCell(
 ) {
     let icon;
 
-    switch (value.currency) {
-        case 'ETH':
+    switch (value.currency.toLowerCase()) {
         case 'eth':
             icon = ethIcon;
             break;
-        case 'BNB':
         case 'bnb':
             icon = bnbIcon;
             break;
-        case 'MANA':
         case 'mana':
             icon = manaIcon;
             break;
-        case 'VET':
         case 'vet':
             icon = vetIcon;
+            break;
+        case 'sol':
+            icon = solIcon;
+            break;
+        case 'tether':
+            icon = tetherIcon;
             break;
         default:
             icon = btcIcon;

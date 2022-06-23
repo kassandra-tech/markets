@@ -30,12 +30,16 @@ export default function MarketRow({
 }: MarketRowProps) {
 
     const rootItemData: MarketDataModel = data.data[0];
-    const expandableData: MarketDataModel[] = data.data.slice(1);
+    const expandableData: MarketDataModel[] = data.data.slice(1, 61);
+
+    const showAll = () => {
+        console.log('data', data);
+    }
 
     return (
         <RowWithHover role="button" onClick={() => expandable ? expandRow() : null}>
             {rootItemData && <MarketRowLine data={rootItemData}/>}
-            {isExpanded && React.cloneElement(expandableComponent, { data: expandableData})}
+            {isExpanded && React.cloneElement(expandableComponent, { data: expandableData, showAll})}
         </RowWithHover>
 
     )
