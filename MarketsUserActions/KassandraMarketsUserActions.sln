@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31729.503
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KassandraMarketsUserActions", "KassandraMarketsUserActions.csproj", "{ED3396CB-4DE8-4D70-8E59-7F3CEEA2AFE8}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "KassandraWebTest", "..\webtest\KassandraWebTest\KassandraWebTest.csproj", "{012AA8E2-1B4E-4C70-93D9-AE38DEE112C9}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{ED3396CB-4DE8-4D70-8E59-7F3CEEA2AFE8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{ED3396CB-4DE8-4D70-8E59-7F3CEEA2AFE8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{ED3396CB-4DE8-4D70-8E59-7F3CEEA2AFE8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{ED3396CB-4DE8-4D70-8E59-7F3CEEA2AFE8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{012AA8E2-1B4E-4C70-93D9-AE38DEE112C9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{012AA8E2-1B4E-4C70-93D9-AE38DEE112C9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{012AA8E2-1B4E-4C70-93D9-AE38DEE112C9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{012AA8E2-1B4E-4C70-93D9-AE38DEE112C9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4CD7DD26-7039-47AC-81CF-D5D9459610C7}
+	EndGlobalSection
+EndGlobal
