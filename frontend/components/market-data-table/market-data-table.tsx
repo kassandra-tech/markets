@@ -17,7 +17,7 @@ const Container = styled.main`
       width: 1410px;
       height: 755px;
       margin-left: 15px;
-      margin-top: 95px;
+      //margin-top: 95px;
       overflow: hidden;
       background: #202226;
 `;
@@ -104,7 +104,6 @@ export default function MarketDataTable(
     }
 
     const expandRow = (index: number) => {
-        console.log('toggleRow: ', index);
         if (expandedRowIndex === index) {
             setExpandedRowIndex(-1);
         } else {
