@@ -5,6 +5,8 @@ import ftx from '../public/markets/ftx.png';
 import coinBase from '../public/markets/coinbase.png';
 import huobiGlobal from '../public/markets/huobi-global.png';
 import bittrex from '../public/markets/bittrex.png';
+import kucoin from '../public/markets/kucoin.png';
+import gemini from '../public/markets/gemini.png';
 import {StaticImageData} from "next/image";
 
 export function getMarketIconByName(name: string): StaticImageData {
@@ -24,6 +26,12 @@ export function getMarketIconByName(name: string): StaticImageData {
             break;
         case 'bittrex':
             image = bittrex;
+            break;
+        case 'kucoin':
+            image = kucoin;
+            break;
+        case 'gemini':
+            image = gemini;
             break;
         case 'huobiglobal':
             image = huobiGlobal;

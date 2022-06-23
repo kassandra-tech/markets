@@ -77,6 +77,7 @@ export default function MarketDataTable(
 
     const [internalData, setInternalData] = useState<any[]>(data);
     const [visibleData, setVisibleData] = useState<any[]>(data);
+    const [expandedRowIndex, setExpandedRowIndex] = useState<number>(-1);
 
     const [sortingState, setSortingState] = useState<any>({
         order: SortingStates.none,
@@ -88,6 +89,13 @@ export default function MarketDataTable(
         setVisibleData(data);
     }, [data]);
 
+    useEffect(() => {
+        const {field, order} = sortingState;
+        let sortedData = [];
+        sortedData = orderBy(internalData, (item) => getSortingFieldValue(item, field), [order]);
+        setVisibleData(sortedData);
+    }, [sortingState]);
+
     const sortChange = (order: SortingStates, field: string) => {
         setSortingState({
             order,
@@ -95,12 +103,14 @@ export default function MarketDataTable(
         })
     }
 
-    useEffect(() => {
-        const {field, order} = sortingState;
-        let sortedData = [];
-        sortedData = orderBy(internalData, (item) => getSortingFieldValue(item, field), [order]);
-        setVisibleData(sortedData);
-    }, [sortingState]);
+    const expandRow = (index: number) => {
+        console.log('toggleRow: ', index);
+        if (expandedRowIndex === index) {
+            setExpandedRowIndex(-1);
+        } else {
+            setExpandedRowIndex(index);
+        }
+    }
 
     return <Container>
         <TableFilters
@@ -122,12 +132,14 @@ export default function MarketDataTable(
                 }
             </div>
             <div className="table-body">
-                {visibleData.length > 0 && visibleData.map((item: any) => rowComponent ?
+                {visibleData.length > 0 && visibleData.map((item: any, index: number) => rowComponent ?
                     React.cloneElement(rowComponent, {
                         data: item,
                         columns: columns,
                         expandable: expandable,
                         expandableComponent: expandableComponent,
+                        expandRow: () => expandRow(index),
+                        isExpanded: expandedRowIndex === index,
                         key: uuidV4()
                     }) : <TableRow
                     data={item}

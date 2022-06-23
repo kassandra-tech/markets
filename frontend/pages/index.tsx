@@ -109,13 +109,13 @@ const Market: NextPage = () => {
     }
     const loadFavorites = async () => {
         const response = await getFavorites();
-        setMarketData(response);
+        setMarketData(response.filter((item: MarketDataResponseModel) => !!item.data.length));
         console.log('favorites response', response);
     }
 
     const loadData = async (marketsFilter = 1) => {
         const response: MarketDataResponseModel[] = await getMarketsData(marketsFilter);
-        setMarketData(response);
+        setMarketData(response.filter((item: MarketDataResponseModel) => !!item.data.length));
         console.log('datatable data response', response);
     }
 

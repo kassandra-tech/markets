@@ -16,23 +16,26 @@ export interface MarketRowProps {
     data?: any;
     expandable?: boolean;
     columns?: Column[];
-    expandableComponent?: any
+    expandableComponent?: any;
+    expandRow?: () => void;
+    isExpanded?: boolean;
 }
 
 export default function MarketRow({
-  data = [],
-  expandable = false,
-  expandableComponent = `<div/>`
+    data = [],
+    expandable = false,
+    expandableComponent = `<div/>`,
+    isExpanded = false,
+    expandRow = () => {},
 }: MarketRowProps) {
 
-    const {toggleFlag, switchToggle} = useToggle();
     const rootItemData: MarketDataModel = data.data[0];
     const expandableData: MarketDataModel[] = data.data.slice(1);
 
     return (
-        <RowWithHover role="button" onClick={() => expandable ? switchToggle() : null}>
+        <RowWithHover role="button" onClick={() => expandable ? expandRow() : null}>
             {rootItemData && <MarketRowLine data={rootItemData}/>}
-            {toggleFlag && React.cloneElement(expandableComponent, { data: expandableData})}
+            {isExpanded && React.cloneElement(expandableComponent, { data: expandableData})}
         </RowWithHover>
 
     )

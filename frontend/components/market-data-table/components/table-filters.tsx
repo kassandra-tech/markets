@@ -45,7 +45,7 @@ export enum baseFilterValues {
 
 export default function TableFilters({filtersChange, loadFavorites, data = []}: TableFiltersParams) {
 
-    const [selectedFilter, setSelectedFilter] = useState<number>(0);
+    const [selectedFilter, setSelectedFilter] = useState<number>(baseFilterValues.all);
 
     const selectFilter = (filterValue: number) => {
         setSelectedFilter(filterValue);

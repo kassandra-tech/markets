@@ -4,7 +4,7 @@ import {v4 as uuidV4} from 'uuid';
 import {MarketDataModel} from "../../../models/MarketDataModel";
 import MarketRowLine from "./MarketRowLine";
 import InfiniteScroll from "react-infinite-scroll-component";
-import {useState} from "react";
+import React, { useState } from "react";
 
 const Styles = styled.div`
     height: 310px;
@@ -12,9 +12,10 @@ const Styles = styled.div`
     overflow-y: scroll;
 `;
 
-const SLICE_STEP = 50;
+const SLICE_STEP = 15;
 
 export default function ExpandableRow({data = []}: {data?: MarketDataModel[]}) {
+
     //console.log('expandable props: ', data);
 
     const [index, setIndex] = useState<number>(SLICE_STEP);
