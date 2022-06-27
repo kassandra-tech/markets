@@ -7,7 +7,7 @@ class MarketInfo {
         this.time = Math.round(Date.now() - time);
     }
 
-    saveData = async () => {
+    async saveData() {
         var MarketObj = Moralis.Object.extend(this.exchange + "Markets");
         var marketObj = new MarketObj();
 

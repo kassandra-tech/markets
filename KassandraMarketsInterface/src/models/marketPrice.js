@@ -13,7 +13,6 @@ class MarketPrice {
             let MarketObj = Moralis.Object.extend("Prices");
             let query = new Moralis.Query(MarketObj);
             query.equalTo("exchange", this.exchange);
-            query.live = true;
             let results = await query.find();
     
             if (results.length > 0) {

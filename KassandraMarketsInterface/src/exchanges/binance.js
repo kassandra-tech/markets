@@ -20,8 +20,6 @@ class Binance {
     }
 
     async markets() {
-        const time = Date.now();
-        
         try {
             const exchangeInfo = await binance.exchangeInfo();
             var markets = exchangeInfo.symbols;
@@ -36,7 +34,8 @@ class Binance {
                 marketsList.push(data);
             });
 
-            var market = new Markets(this.name, marketsList, time);
+            var market = new Markets(this.name, marketsList);
+            market.saveExchangeMarkets();
         } catch (error) {
             console.log("Error: " + error);
         }
@@ -48,26 +47,30 @@ class Binance {
         let markets = Moralis.Object.extend(this.name + "Markets");
         let query = new Moralis.Query(markets);
         query.descending("createdAt");
+
         let results = await query.first();
-        let data = results.get("markets");
-        let marketArray = [];
-        let updates = {};
-        let updateTime = Date.now();
 
-        // Add all markets to add to trades watch.
-        data.forEach((element) => {
-            marketArray.push(element.name);
-        })
+        if (results !== undefined) {
+            let data = results.get("markets");
+            let marketArray = [];
+            let updates = {};
+            let updateTime = Date.now();
 
-        binance.ws.trades(marketArray, (trades) => {
-            let data = new MarketPrice(this.name, trades);
-            updates[data.symbol] = data;
+            // Add all markets to add to trades watch.
+            data.forEach((element) => {
+                marketArray.push(element.name);
+            })
 
-             if (Date.now() > updateTime + 500) {
-                updateTime = Date.now();
-                data.saveData(updates);
-             }
-        });
+            binance.ws.trades(marketArray, (trades) => {
+                let data = new MarketPrice(this.name, trades);
+                updates[data.symbol] = data;
+
+                if (Date.now() > updateTime + 500) {
+                    updateTime = Date.now();
+                    data.saveData(updates);
+                }
+            });
+        }
     }
 }
 
