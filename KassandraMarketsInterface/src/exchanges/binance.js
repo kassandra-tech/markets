@@ -1,5 +1,6 @@
 const { MarketPrice } = require('../models/marketPrice');
 const { Markets } = require('../models/markets');
+const { PriceData } = require('../models/priceData');
 const BinanceInterface = require('binance-api-node');
 const binance = BinanceInterface.default({
     apiKey: process.env.BINANCE_API_KEY,
@@ -15,7 +16,6 @@ Moralis.start({ serverUrl, appId });
 class Binance {
     constructor() {
         this.name = 'Binance';
-        this.trades = null;
         this.initializeSockets();
     }
 
@@ -54,7 +54,9 @@ class Binance {
             let data = results.get("markets");
             let marketArray = [];
             let updates = {};
+            let prices = [];
             let updateTime = Date.now();
+            let priceUpdateTime = Date.now();
 
             // Add all markets to add to trades watch.
             data.forEach((element) => {
@@ -62,12 +64,27 @@ class Binance {
             })
 
             binance.ws.trades(marketArray, (trades) => {
-                let data = new MarketPrice(this.name, trades);
+                var data = new MarketPrice(this.name, trades);
                 updates[data.symbol] = data;
+
+                var price;
+                if (price = prices.find(record => record.symbol === trades.symbol)) {
+                    price.update(trades);
+                } else {
+                    price = new PriceData(this.name, trades);
+                    prices.push(price);
+                }
 
                 if (Date.now() > updateTime + 500) {
                     updateTime = Date.now();
                     data.saveData(updates);
+                }
+
+                if (Date.now() > priceUpdateTime + 60000) {
+                    priceUpdateTime = Date.now();
+                    price.saveData(prices);
+
+                    prices = [];
                 }
             });
         }

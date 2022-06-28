@@ -25,6 +25,16 @@ class Market {
             console.log(error);
         }
       };
+
+      async getMarkets() {
+        let MarketObj = Moralis.Object.extend("Markets");
+        let query = new Moralis.Query(MarketObj);
+        query.descending("createdAt");
+
+        var record = await query.first();
+    
+        return record.get("markets");
+    }
 }
 
 module.exports = {

@@ -10,7 +10,7 @@ class MarketPrice {
 
     async saveData (prices) {
         try {
-            let MarketObj = Moralis.Object.extend("Prices");
+            let MarketObj = Moralis.Object.extend("Price");
             let query = new Moralis.Query(MarketObj);
             query.equalTo("exchange", this.exchange);
             let results = await query.find();

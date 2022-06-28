@@ -3,7 +3,7 @@ const router = express.Router();
 const {Binance} = require('../exchanges/binance');
 const {Coinbase} = require('../exchanges/coinbase-pro');
 const { Currency } = require("../models/currency");
-const { Markets } = require("../models/markets");
+const { Market } = require("../models/market");
 
 const binance = new Binance();
 const coinbase = new Coinbase();
@@ -13,6 +13,10 @@ router.get('/currencies', async function(request, response) {
 });
 
 router.get('/markets', async function(request, response) {
+    return response.json(await new Market().getMarkets());
+});
+
+router.post('/markets', async function(request, response) {
     var MarketsList = [];
     var filter = request.query.exchangesFilter;
 
