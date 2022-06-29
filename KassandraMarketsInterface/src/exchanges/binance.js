@@ -16,6 +16,7 @@ Moralis.start({ serverUrl, appId });
 class Binance {
     constructor() {
         this.name = 'Binance';
+        this.marketsList = [];
         this.initializeSockets();
     }
 
@@ -23,7 +24,7 @@ class Binance {
         try {
             const exchangeInfo = await binance.exchangeInfo();
             var markets = exchangeInfo.symbols;
-            var marketsList = [];
+            var tempList = [];
 
             Array.from(markets).forEach(function(market) {
                 var data = {};
@@ -31,10 +32,11 @@ class Binance {
                 data['name'] = market.symbol;
                 data['currency'] = market.baseAsset;
                 data['quoteCurrency'] = market.quoteAsset;
-                marketsList.push(data);
+                tempList.push(data);
             });
 
-            var market = new Markets(this.name, marketsList);
+            this.marketsList = tempList;
+            var market = new Markets(this.name, this.marketsList);
             market.saveExchangeMarkets();
         } catch (error) {
             console.log("Error: " + error);
@@ -44,50 +46,55 @@ class Binance {
     }
 
     async initializeSockets() {
-        let markets = Moralis.Object.extend(this.name + "Markets");
-        let query = new Moralis.Query(markets);
+        var markets = Moralis.Object.extend(this.name + "Markets");
+        var query = new Moralis.Query(markets);
         query.descending("createdAt");
+        var results = await query.first();
 
-        let results = await query.first();
+        var marketArray = [];
+        var updates = {};
+        var prices = [];
+        var updateTime = Date.now();
+        var priceUpdateTime = Date.now();
 
         if (results !== undefined) {
-            let data = results.get("markets");
-            let marketArray = [];
-            let updates = {};
-            let prices = [];
-            let updateTime = Date.now();
-            let priceUpdateTime = Date.now();
+            this.marketsList = results.get("markets");
 
             // Add all markets to add to trades watch.
-            data.forEach((element) => {
+            this.marketsList.forEach((element) => {
                 marketArray.push(element.name);
             })
-
-            binance.ws.trades(marketArray, (trades) => {
-                var data = new MarketPrice(this.name, trades);
-                updates[data.symbol] = data;
-
-                var price;
-                if (price = prices.find(record => record.symbol === trades.symbol)) {
-                    price.update(trades);
-                } else {
-                    price = new PriceData(this.name, trades);
-                    prices.push(price);
-                }
-
-                if (Date.now() > updateTime + 500) {
-                    updateTime = Date.now();
-                    data.saveData(updates);
-                }
-
-                if (Date.now() > priceUpdateTime + 60000) {
-                    priceUpdateTime = Date.now();
-                    price.saveData(prices);
-
-                    prices = [];
-                }
-            });
+            
+        } else {
+            this.markets();
         }
+
+        binance.ws.trades(marketArray, (trades) => {
+            var market = this.marketsList.find(record => record.name === trades.symbol);
+
+            var data = new MarketPrice(this.name, market.market, trades);
+            updates[data.symbol] = data;
+
+            var price;
+            if (price = prices.find(record => record.symbol === trades.symbol)) {
+                price.update(trades);
+            } else {
+                price = new PriceData(this.name, market.market, trades);
+                prices.push(price);
+            }
+
+            if (Date.now() > updateTime + 500) {
+                updateTime = Date.now();
+                data.saveData(updates);
+            }
+
+            if (Date.now() > priceUpdateTime + 60000) {
+                priceUpdateTime = Date.now();
+                price.saveData(prices);
+
+                prices = [];
+            }
+        });
     }
 }
 

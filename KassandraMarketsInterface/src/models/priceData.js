@@ -2,9 +2,9 @@ const Moralis = require("moralis/node");
 const { PriceRecord } = require("./priceRecord");
 
 class PriceData {
-    constructor(exchange, data) {
+    constructor(exchange, market, data) {
         this.exchange = exchange;
-        this.symbol = data.symbol;
+        this.symbol = market;
         this.lowPrice = data.price;
         this.highPrice = data.price;
         this.buyVolume = 0.0;

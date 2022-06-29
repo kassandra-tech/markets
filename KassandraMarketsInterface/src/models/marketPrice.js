@@ -1,9 +1,9 @@
 const Moralis = require("moralis/node");
 
 class MarketPrice {
-    constructor(exchange, data) {
+    constructor(exchange, symbol, data) {
         this.exchange = exchange;
-        this.symbol = data.symbol;
+        this.symbol = symbol;
         this.time = data.tradeTime;
         this.price = data.price;
     }
