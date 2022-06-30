@@ -1,25 +1,14 @@
 const Moralis = require("moralis/node");
+const { PriceRecord } = require("../models/priceRecord");
 
-class PriceData {
-    constructor(exchange, market, data) {
-        this.exchange = exchange;
-        this.symbol = market;
-        this.price = data.price;
-        this.lowPrice = data.price;
-        this.highPrice = data.price;
-        this.buyVolume = 0.0;
-        this.sellVolume = 0.0;
-        this.volume = 0.0;
-
-        this.update(data);
-    }
-
+class Price {
     update(data) {
         var price = data.price;
         var amount = data.quantity;
         var isBuy = data.isBuyerMaker;
+        var time = data.tradeTime;
 
-        this.price = (parseFloat(this.lowPrice) + parseFloat(this.highPrice)) / 2;
+        this.prices.push(new PriceRecord(price, amount, isBuy, time));
 
         if (price < this.lowPrice) {
             this.lowPrice = price;
@@ -49,15 +38,31 @@ class PriceData {
         }
     }
 
-    async getData() {
+    async getPrice(exchange) {
+        try {
+            let MarketObj = Moralis.Object.extend("Price");
+            let query = new Moralis.Query(MarketObj);
+            query.equalTo("exchange", exchange);     
+            var record = await query.first();
+
+            if (record !== undefined) {
+                return record.get("prices");
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+
+    async getPrices() {
         try {
             let PriceObj = Moralis.Object.extend("Prices");
             let query = new Moralis.Query(PriceObj);
             query.descending("createdAt");
-    
             var record = await query.first();
-        
-            return record.get("prices");
+
+            if (record !== undefined) {
+                return record.get("prices");
+            }
         } catch (error) {
             console.log(error);
         }
@@ -65,5 +70,5 @@ class PriceData {
 }
 
 module.exports = {
-    PriceData
+    Price
 };

@@ -76,7 +76,7 @@ class Binance {
             updates[data.symbol] = data;
 
             var price;
-            if (price = prices.find(record => record.symbol === trades.symbol)) {
+            if (price = prices.find(record => record.symbol  === market.market)) {
                 price.update(trades);
             } else {
                 price = new PriceData(this.name, market.market, trades);

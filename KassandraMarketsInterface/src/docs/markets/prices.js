@@ -1,16 +1,16 @@
 module.exports = {
     get: {
       tags: ["Markets"],
-      description: "Available markets.",
-      operationId: "./routes/markets/markets",
+      description: "Current Prices",
+      operationId: "/routes/markets/price",
       parameters: [],
       responses: {
         200: {
-          description: "Supported markets",
+          description: "Current market price",
           content: {
             "application/json": {
               schema: {
-                "type": "array",
+                "type": "string",
               },
             },
           },
@@ -20,18 +20,19 @@ module.exports = {
         },
       },
     },
-    post: {
+
+    get: {
       tags: ["Markets"],
-      description: "Available markets.",
-      operationId: "./routes/markets/markets",
+      description: "Current Prices Information",
+      operationId: "/routes/markets/prices",
       parameters: [],
       responses: {
         200: {
-          description: "Supported markets",
+          description: "Market price information",
           content: {
             "application/json": {
               schema: {
-                "type": "array",
+                "type": "string",
               },
             },
           },
@@ -42,3 +43,4 @@ module.exports = {
       },
     },
   };
+  
