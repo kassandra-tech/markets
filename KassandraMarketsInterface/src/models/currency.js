@@ -1,5 +1,8 @@
 const Moralis = require("moralis/node");
 
+const CurrenciesString = "Currencies";
+const currenciesString = "currencies";
+
 class Currency {
     constructor(currency, exchange) {
         this.name = currency;
@@ -15,23 +18,27 @@ class Currency {
 
     async saveData(currencies) {
         try {
-            var CurrencyObj = Moralis.Object.extend("Currencies");
-                let currencyObj = new CurrencyObj();        
-                currencyObj.set("currencies", currencies);
-                currencyObj.save();
+            var CurrencyObj = Moralis.Object.extend(CurrenciesString);
+            let currencyObj = new CurrencyObj();
+            currencyObj.set(currenciesString, currencies);
+            currencyObj.save();
         } catch (error) {
             console.log(error);
         }
       };
 
     async getCurrencies() {
-        let MarketObj = Moralis.Object.extend("Currencies");
+        try {
+        let MarketObj = Moralis.Object.extend(CurrenciesString);
         let query = new Moralis.Query(MarketObj);
         query.descending("createdAt");
-
-        var testo = await query.first();
+        var record = await query.first();
     
-        return testo.get("currencies");
+        return record.get(currenciesString);
+        } catch (error) {
+            console.log(error);
+        }
+
     }
 }
 

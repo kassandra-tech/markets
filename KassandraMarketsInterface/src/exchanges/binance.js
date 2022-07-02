@@ -72,8 +72,13 @@ class Binance {
         binance.ws.trades(marketArray, (trades) => {
             var market = this.marketsList.find(record => record.name === trades.symbol);
 
-            var data = new MarketPrice(this.name, market.market, trades);
-            updates[data.symbol] = data;
+            var currentPrice = new MarketPrice(this.name, market.market, trades);
+            updates[currentPrice.symbol] = currentPrice;
+
+            if (Date.now() > updateTime + 500) {
+                updateTime = Date.now();
+                currentPrice.saveData(updates);
+            }
 
             var price;
             if (price = prices.find(record => record.symbol  === market.market)) {
@@ -81,11 +86,6 @@ class Binance {
             } else {
                 price = new PriceData(this.name, market.market, trades);
                 prices.push(price);
-            }
-
-            if (Date.now() > updateTime + 500) {
-                updateTime = Date.now();
-                data.saveData(updates);
             }
 
             if (Date.now() > priceUpdateTime + 60000) {

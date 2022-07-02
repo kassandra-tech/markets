@@ -1,5 +1,8 @@
 const Moralis = require("moralis/node");
 
+const MarketsString = "Markets";
+const marketsString = "markets";
+
 class Market {
     constructor(market, exchange) {
         this.name = market;
@@ -15,9 +18,9 @@ class Market {
 
     async saveData(markets) {
         try {
-            var MarketsObj = Moralis.Object.extend("Markets");
+            var MarketsObj = Moralis.Object.extend(MarketsString);
             let marketsObj = new MarketsObj();        
-            marketsObj.set("markets", markets);
+            marketsObj.set(marketsString, markets);
             marketsObj.save();
 
             return marketsObj;
@@ -27,13 +30,16 @@ class Market {
       };
 
       async getMarkets() {
-        let MarketObj = Moralis.Object.extend("Markets");
-        let query = new Moralis.Query(MarketObj);
-        query.descending("createdAt");
-
-        var record = await query.first();
-    
-        return record.get("markets");
+        try {
+            let MarketObj = Moralis.Object.extend(MarketsString);
+            let query = new Moralis.Query(MarketObj);
+            query.descending("createdAt");
+            var record = await query.first();
+        
+            return record.get(marketsString);
+        } catch (error) {
+            console.log(error);
+        }
     }
 }
 

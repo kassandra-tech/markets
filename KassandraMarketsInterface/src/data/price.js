@@ -8,8 +8,6 @@ class Price {
         var isBuy = data.isBuyerMaker;
         var time = data.tradeTime;
 
-        this.prices.push(new PriceRecord(price, amount, isBuy, time));
-
         if (price < this.lowPrice) {
             this.lowPrice = price;
         } else if (price > this.highPrice) {
