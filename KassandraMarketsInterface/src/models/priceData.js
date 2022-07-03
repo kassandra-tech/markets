@@ -1,8 +1,5 @@
-const Moralis = require("moralis/node");
-
 class PriceData {
-    constructor(exchange, market, data) {
-        this.exchange = exchange;
+    constructor(market, data) {
         this.symbol = market;
         this.price = data.price;
         this.lowPrice = data.price;
@@ -35,33 +32,6 @@ class PriceData {
             }
 
             this.volume = parseFloat(this.volume) + parseFloat(amount);
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async saveData (prices) {
-        try {
-            let MarketObj = Moralis.Object.extend("Prices");
-            let marketObj = new MarketObj();
-    
-            marketObj.set("exchange", this.exchange);
-            marketObj.set("prices", prices);
-            marketObj.save();
-        } catch (error) {
-            console.log(error);
-        }
-    }
-
-    async getData() {
-        try {
-            let PriceObj = Moralis.Object.extend("Prices");
-            let query = new Moralis.Query(PriceObj);
-            query.descending("createdAt");
-    
-            var record = await query.first();
-        
-            return record.get("prices");
         } catch (error) {
             console.log(error);
         }

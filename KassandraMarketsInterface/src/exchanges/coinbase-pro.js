@@ -1,34 +1,29 @@
+const { Market } = require('../models/market');
 const { Markets } = require('../models/markets');
+const { MarketInformation } = require("../models/marketInformation");
 const CoinbaseInterface = require('coinbase-pro-node');
 const coinbase = new CoinbaseInterface.default();
 
 class Coinbase {
     constructor() {
         this.name = 'Coinbase';
+        this.marketsList = [];
     }
 
     async markets() {
-        const time = Date.now();
-        var market;
-
         try {
             const markets = await coinbase.rest.product.getProducts();
-            var marketsList = [];
+            var tempList = []; // Protect against dyamic data changing during operation.
             Array.from(markets).forEach(function(market) {
-                var data = {};
-                data['market'] = market.base_currency + '-' + market.quote_currency;
-                data['name'] = market.display_name;
-                data['currency'] = market.base_currency;
-                data['quoteCurrency'] = market.quote_currency;
-                marketsList.push(data);
+                tempList.push(new MarketInformation(market.base_currency, market.quote_currency, market.display_name));
             });
-            market = new Markets(this.name, marketsList);
-            market.saveExchangeMarkets();
+            this.marketsList = tempList;
+            new Market().saveExchangeMarkets(this.name, this.marketsList);
         } catch (error) {
-            console.log("Error: " + error);
+            console.log(error);
         }
 
-        return market;
+        return new Markets(this.name, this.marketsList);;
     }
 }
 

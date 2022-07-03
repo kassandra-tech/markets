@@ -4,7 +4,7 @@ const {Binance} = require('../exchanges/binance');
 const {Coinbase} = require('../exchanges/coinbase-pro');
 const { Currency } = require("../models/currency");
 const { Market } = require("../models/market");
-const { Price } = require("../data/price");
+const { Price } = require("../models/price");
 
 const binance = new Binance();
 const coinbase = new Coinbase();
@@ -31,7 +31,7 @@ router.post('/markets', async function(request, response) {
         MarketsList.push(marketsList);
     }
 
-    return response.json(await marketsList.saveData(MarketsList));
+    return response.json(await new Market().saveMarkets(MarketsList));
 });
 
 router.get('/price', async function(request, response) {

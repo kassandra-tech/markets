@@ -1,12 +1,15 @@
-const { MarketPrice } = require('../models/marketPrice');
+const Moralis = require("moralis/node");
+const { Market } = require('../models/market');
 const { Markets } = require('../models/markets');
+const { MarketPrice } = require('../models/marketPrice');
+const { MarketInformation } = require("../models/marketInformation");
+const { Price } = require('../models/price');
 const { PriceData } = require('../models/priceData');
 const BinanceInterface = require('binance-api-node');
 const binance = BinanceInterface.default({
     apiKey: process.env.BINANCE_API_KEY,
     apiSecret: process.env.BINANCE_API_SECRET
   });
-const Moralis = require("moralis/node");
 
 const serverUrl = "https://dqywxuqq3yjn.usemoralis.com:2053/server";
 const appId = "QHKl8mDT6Uaw7D6RMJIzgSpiAqksNBLO0OPLECN5";
@@ -17,6 +20,7 @@ class Binance {
     constructor() {
         this.name = 'Binance';
         this.marketsList = [];
+        this.Market = new Market();
         this.initializeSockets();
     }
 
@@ -24,73 +28,59 @@ class Binance {
         try {
             const exchangeInfo = await binance.exchangeInfo();
             var markets = exchangeInfo.symbols;
-            var tempList = [];
+            var tempList = []; // Protect against dyamic data changing during operation.
 
             Array.from(markets).forEach(function(market) {
-                var data = {};
-                data['market'] = market.baseAsset + '-' + market.quoteAsset;
-                data['name'] = market.symbol;
-                data['currency'] = market.baseAsset;
-                data['quoteCurrency'] = market.quoteAsset;
-                tempList.push(data);
+                tempList.push(new MarketInformation(market.baseAsset, market.quoteAsset, market.symbol));
             });
 
             this.marketsList = tempList;
-            var market = new Markets(this.name, this.marketsList);
-            market.saveExchangeMarkets();
+            this.Market.saveExchangeMarkets(this.name, this.marketsList);
         } catch (error) {
-            console.log("Error: " + error);
+            console.log(error);
         }
 
-        return market;
+        return new Markets(this.name, this.marketsList);
     }
 
     async initializeSockets() {
-        var markets = Moralis.Object.extend(this.name + "Markets");
-        var query = new Moralis.Query(markets);
-        query.descending("createdAt");
-        var results = await query.first();
-
         var marketArray = [];
         var updates = {};
         var prices = [];
         var updateTime = Date.now();
         var priceUpdateTime = Date.now();
 
-        if (results !== undefined) {
-            this.marketsList = results.get("markets");
-
-            // Add all markets to add to trades watch.
-            this.marketsList.forEach((element) => {
-                marketArray.push(element.name);
-            })
-            
-        } else {
-            this.markets();
+        if (this.marketsList.length === 0) {
+            await this.markets();
         }
 
+        this.marketsList.forEach((element) => {
+            marketArray.push(element.symbol);
+        })
+
         binance.ws.trades(marketArray, (trades) => {
-            var market = this.marketsList.find(record => record.name === trades.symbol);
+            var market = this.marketsList.find(record => record.symbol === trades.symbol);
 
-            var currentPrice = new MarketPrice(this.name, market.market, trades);
-            updates[currentPrice.symbol] = currentPrice;
+            var currentPrice = new MarketPrice(trades);
+            updates[market.market] = currentPrice;
 
+            // Update the current market price 2 x per second.
             if (Date.now() > updateTime + 500) {
                 updateTime = Date.now();
-                currentPrice.saveData(updates);
+                new Price().saveData(this.name, updates);
             }
 
             var price;
             if (price = prices.find(record => record.symbol  === market.market)) {
                 price.update(trades);
             } else {
-                price = new PriceData(this.name, market.market, trades);
+                price = new PriceData(market.market, trades);
                 prices.push(price);
             }
 
             if (Date.now() > priceUpdateTime + 60000) {
                 priceUpdateTime = Date.now();
-                price.saveData(prices);
+                new Price().saveData(this.name, prices, false);
 
                 prices = [];
             }

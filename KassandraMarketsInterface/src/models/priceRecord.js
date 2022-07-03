@@ -1,5 +1,3 @@
-const Moralis = require("moralis/node");
-
 class PriceRecord {
     constructor(price, amount, isBuy, time) {
         this.price = price;
