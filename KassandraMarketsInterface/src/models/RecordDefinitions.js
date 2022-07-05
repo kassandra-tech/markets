@@ -12,6 +12,7 @@ class RecordDefinitions {
 
         this.createdAtString = "createdAt";
         this.exchangeString = "exchange";
+        this.updatedAtString = "updatedAt";
     }
 }
 

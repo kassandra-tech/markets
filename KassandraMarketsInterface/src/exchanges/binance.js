@@ -6,6 +6,7 @@ const { MarketInformation } = require("../models/marketInformation");
 const { Price } = require('../models/price');
 const { PriceData } = require('../models/priceData');
 const BinanceInterface = require('binance-api-node');
+const { MarketRecord } = require("../models/marketRecord");
 const binance = BinanceInterface.default({
     apiKey: process.env.BINANCE_API_KEY,
     apiSecret: process.env.BINANCE_API_SECRET
@@ -21,6 +22,7 @@ class Binance {
         this.name = 'Binance';
         this.marketsList = [];
         this.Market = new Market();
+        this.MarketRecord = new MarketRecord();
         this.initializeSockets();
     }
 
@@ -49,6 +51,7 @@ class Binance {
         var prices = [];
         var updateTime = Date.now();
         var priceUpdateTime = Date.now();
+        var marketsUpdateTime = Date.now();
 
         if (this.marketsList.length === 0) {
             await this.markets();
@@ -81,6 +84,13 @@ class Binance {
             if (Date.now() > priceUpdateTime + 60000) {
                 priceUpdateTime = Date.now();
                 new Price().saveData(this.name, prices, false);
+
+                prices = [];
+            }
+
+            if (Date.now() > marketsUpdateTime + 300000) {
+                marketsUpdateTime = Date.now();
+                this.MarketRecord.getRecords(5);
 
                 prices = [];
             }
