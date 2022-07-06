@@ -5,6 +5,7 @@ class RecordDefinitions {
 
         this.MarketsString = "Markets";
         this.marketsString = "markets";
+        this.marketRecordString = "MarketRecord";
 
         this.PriceString = "Price";
         this.PricesString = "Prices";

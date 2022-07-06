@@ -20,7 +20,10 @@ Moralis.start({ serverUrl, appId });
 class Binance {
     constructor() {
         this.name = 'Binance';
+        this.currentPrices = {};
+        this.marketPrices = [];
         this.marketsList = [];
+
         this.Market = new Market();
         this.MarketRecord = new MarketRecord();
         this.initializeSockets();
@@ -32,7 +35,7 @@ class Binance {
             var markets = exchangeInfo.symbols;
             var tempList = []; // Protect against dyamic data changing during operation.
 
-            Array.from(markets).forEach(function(market) {
+            Array.from(markets).forEach(market => {
                 tempList.push(new MarketInformation(market.baseAsset, market.quoteAsset, market.symbol));
             });
 
@@ -47,8 +50,6 @@ class Binance {
 
     async initializeSockets() {
         var marketArray = [];
-        var updates = {};
-        var prices = [];
         var updateTime = Date.now();
         var priceUpdateTime = Date.now();
         var marketsUpdateTime = Date.now();
@@ -65,34 +66,32 @@ class Binance {
             var market = this.marketsList.find(record => record.symbol === trades.symbol);
 
             var currentPrice = new MarketPrice(trades);
-            updates[market.market] = currentPrice;
+            this.currentPrices[market.market] = currentPrice;
 
             // Update the current market price 2 x per second.
             if (Date.now() > updateTime + 500) {
                 updateTime = Date.now();
-                new Price().saveData(this.name, updates);
+                new Price().saveData(this.name, this.currentPrices);
             }
 
             var price;
-            if (price = prices.find(record => record.symbol  === market.market)) {
+            if (price = this.marketPrices.find(record => record.symbol  === market.market)) {
                 price.update(trades);
             } else {
                 price = new PriceData(market.market, trades);
-                prices.push(price);
+                this.marketPrices.push(price);
             }
 
             if (Date.now() > priceUpdateTime + 60000) {
                 priceUpdateTime = Date.now();
-                new Price().saveData(this.name, prices, false);
+                new Price().saveData(this.name, this.marketPrices, false);
 
-                prices = [];
+                this.marketPrices = [];
             }
 
             if (Date.now() > marketsUpdateTime + 300000) {
                 marketsUpdateTime = Date.now();
-                this.MarketRecord.getRecords(5);
-
-                prices = [];
+                this.MarketRecord.getRecords(this.marketsList, this.currentPrices, 5);
             }
         });
     }
