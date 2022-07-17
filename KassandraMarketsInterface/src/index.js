@@ -8,8 +8,8 @@ const Moralis = require("moralis/node");
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-const serverUrl = "https://dqywxuqq3yjn.usemoralis.com:2053/server";
-const appId = "QHKl8mDT6Uaw7D6RMJIzgSpiAqksNBLO0OPLECN5";
+const serverUrl = "https://fbjp6fpn9cfk.usemoralis.com:2053/server";
+const appId = "2eSJJLFJUsHxYjS0FyMA8YOYyqX44DOKinZkvf8E";
 
 Moralis.start({ serverUrl, appId });
 

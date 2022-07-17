@@ -2,6 +2,7 @@ class RecordDefinitions {
     constructor() {
         this.CurrenciesString = "Currencies";
         this.currenciesString = "currencies";
+        this.CurrencyInformationString = "CurrencyInformation";
 
         this.MarketsString = "Markets";
         this.marketsString = "markets";

@@ -12,11 +12,6 @@ const binance = BinanceInterface.default({
     apiSecret: process.env.BINANCE_API_SECRET
   });
 
-const serverUrl = "https://dqywxuqq3yjn.usemoralis.com:2053/server";
-const appId = "QHKl8mDT6Uaw7D6RMJIzgSpiAqksNBLO0OPLECN5";
-
-Moralis.start({ serverUrl, appId });
-
 class Binance {
     constructor() {
         this.name = 'Binance';

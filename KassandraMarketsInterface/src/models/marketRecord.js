@@ -32,30 +32,32 @@ class MarketRecord {
                 this.highPrice = marketInformation.highPrice;
             }
 
-            var price = parseFloat(marketInformation.price);
-            var lowPrice = parseFloat(marketInformation.lowPrice);
-            var highPrice = parseFloat(marketInformation.highPrice);
-            var priceDifference = highPrice - lowPrice;
-            var avgPrice = priceDifference + lowPrice;
-            var lowPercentage = 1 - (price / avgPrice) * 100;
-            var highPercentage = 1 - (price / avgPrice) * 100;
+            var price = parseFloat(marketInformation.price, 8);
+            var lowPrice = parseFloat(marketInformation.lowPrice, 8);
+            var highPrice = parseFloat(marketInformation.highPrice, 8);
+            var avgPrice = parseFloat((highPrice + lowPrice) / 2, 8);
+            var priceGap = parseFloat((highPrice - lowPrice) / 5, 8);
+            var lowPercentage = parseFloat(((price / lowPrice) -1) * 100, 8);
+            var highPercentage = parseFloat((price / highPrice) * 100, 8);
 
-            if (price <= lowPrice + (priceDifference * 0.2)) {
+            if (lowPrice === highPrice) {
+                this.priceLabel = "Hold";
+                this.pricePercentage = 0.0;
+            }
+            else if (price <= parseFloat(lowPrice + priceGap, 8)) {
                 this.priceLabel = "Strong Buy";
                 this.pricePercentage = lowPercentage;
-            } else if (price <= lowPrice + priceDifference * 0.4) {
+            } else if (price <= parseFloat(lowPrice + (priceGap * 2), 8)) {
                 this.priceLabel = "Buy";
                 this.pricePercentage = lowPercentage;
-            } else if (price <= lowPrice + priceDifference * 0.6 || priceDifference === 0) {
+            } else if (price <= parseFloat(lowPrice + (priceGap * 3), 8)) {
                 this.priceLabel = "Hold";
                 if (price < avgPrice) {
                     this.pricePercentage = lowPercentage;
-                } else if (price > avgPrice) {
-                    this.pricePercentage = highPercentage;
                 } else {
-                    this.pricePercentage = 0.0;
+                    this.pricePercentage = highPercentage;
                 }
-            } else if (price <= lowPrice + priceDifference * 0.8) {
+            } else if (price <= parseFloat(lowPrice + (priceGap * 4), 8)) {
                 this.priceLabel = "Sell";
                 this.pricePercentage = highPercentage;
             } else {
@@ -63,9 +65,9 @@ class MarketRecord {
                 this.pricePercentage = highPercentage;
             }
 
-            this.buyVolume = parseFloat(marketInformation.buyVolume) + parseFloat(this.buyVolume);
-            this.sellVolume = parseFloat(marketInformation.sellVolume) + parseFloat(this.sellVolume);
-            this.volume = parseFloat(marketInformation.volume) + parseFloat(this.volume);
+            this.buyVolume = parseFloat(marketInformation.buyVolume, 8) + parseFloat(this.buyVolume, 8);
+            this.sellVolume = parseFloat(marketInformation.sellVolume, 8) + parseFloat(this.sellVolume, 8);
+            this.volume = parseFloat(marketInformation.volume, 8) + parseFloat(this.volume, 8);
         } catch (error) {
             console.log(error);
         }
@@ -81,6 +83,11 @@ class MarketRecord {
             query.descending(Definitions.createdAtString);
             query.greaterThan(Definitions.updatedAtString, new Date(Date.now() - (minutes * 60000)));
             var priceInfo = await query.find();
+
+            let currencyObj = Moralis.Object.extend(Definitions.CurrenciesString);
+            var query = new Moralis.Query(currencyObj);
+            query.descending(Definitions.createdAtString);
+            var currencies = await query.first();
 
             currencyInfo.forEach(record => {
                 var marketInfo = list.find(market => market.symbol === record.market);
@@ -99,6 +106,12 @@ class MarketRecord {
                     marketRecord.lowPrice = price.price;
                     marketRecord.highPrice = price.price;
                 }
+
+                var curr = currencies.get(Definitions.currenciesString);
+                var currency = curr.filter(currency => currency.symbol === marketRecord.currency)[0];
+                marketRecord.currencyName = currency.name;
+                marketRecord.rank = currency.rank;
+
                 list.push(marketRecord);
                 }
             })
